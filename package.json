@@ -1,0 +1,24 @@
+{
+  "name": "evotor-egais-api",
+  "version": "1.0.0",
+  "description": "react native egais support for evotor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:evotor/react-native-egais-api.git"
+  },
+  "keywords": [
+    "evotor",
+    "react",
+    "native",
+    "egais"
+  ],
+  "author": "Artemiy Lunkov <a.lunkov@evotor.ru> (http://evotor.ru/)",
+  "license": "ISC",
+  "dependencies": {
+    "abstract-query-builder": "^1.1.6"
+  }
+}
