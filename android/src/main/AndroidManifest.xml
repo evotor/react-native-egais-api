@@ -1,1 +1,3 @@
-<manifest package="com.evotor.egais"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.evotor.egais">
+    <uses-permission android:name="ru.evotor.permission.EGAIS_READ_API"/>
+</manifest>

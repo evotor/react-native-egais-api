@@ -1,36 +1,30 @@
-/**
- * Классы и типы для работы с актами списания.
- * @module module:actWriteOff
- */
-import ProductInfo from "../dictionary/ProductInfo"
-import {ActWriteOffStatus, ActWriteOffType, Version} from '../types'
+import {ActWriteOffStatus, ActWriteOffType} from "../types";
+import ProductInfo from "../dictionary/ProductInfo";
 
 /**
- * @class module:actWriteOff.ActWriteOff
- * @classdesc Акт списания со склада.
- * @param {string} uuid Уникальный идентификатор акта списания со склада
- * @param {string} docOwner Кто подает документы
+ * @class module:actWriteOff.ActWriteOffShop
+ * @classdesc Акт списания из торгового зала.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} docOwner Владелец документа
  * @param {?string} identity ИД Акта (клиентский)
- * @param {?number} number Номер акта
- * @param {Date} actDate Дата составления акта
- * @param {?module.actWriteOff#ActWriteOffType} type Причина списания
+ * @param {?string} number Номер документа
+ * @param {?Date} actDate Дата составления
+ * @param {module:actWriteOff#ActWriteOffType} type Причина списания
  * @param {?string} note Примечание
- * @param {module:actWriteOff#ActWriteOffStatus} status Состояние
- * @param {?string} rejectComment Комментарий для отказа на акт списания со склада
- * @param {Version} version Версия протокола ЕГАИС
+ * @param {module:actWriteOff#ActWriteOffStatus} status Статус акта списания
+ * @param {?string} rejectComment Комментарий для отказа на акт списания из зала
  * @param {?string} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
-export default class ActWriteOff {
+export default class ActWriteOffShop {
     constructor(uuid: string,
                 docOwner: string,
                 identity: (string | null),
                 number: (string | null),
-                actDate: Date,
-                type: (ActWriteOffType | null),
+                actDate: (Date | null),
+                type: ActWriteOffType,
                 note: (string | null),
                 status: ActWriteOffStatus,
                 rejectComment: (string | null),
-                version: Version,
                 replyId: (string | null)) {
         this.uuid = uuid;
         this.docOwner = docOwner;
@@ -41,40 +35,35 @@ export default class ActWriteOff {
         this.note = note;
         this.status = status;
         this.rejectComment = rejectComment;
-        this.version = version;
         this.replyId = replyId;
     }
 }
 
 /**
- * @class module:actWriteOff.ActWriteOffPosition
- * @classdesc Позиция в акте о списании со склада.
+ * @class module:actWriteOff.ActWriteOffShopPosition
+ * @classdesc Позиция в акте списания из торгового зала.
  * @param {string} uuid Уникальный идентификатор
- * @param {string} actWriteOffUuid Идентификатор акта списания, содержащего позицию
+ * @param {?string} actWriteOffShopId Идентификатор акта списания содержащего позицию
  * @param {?string} identity Идентификатор позиции внутри накладной
  * @param {number} quantity Количество
- * @param {?string} informF2RegId Регистрационный номер раздела справки 2
  * @param {?string} informF2MarkInfoJson Информация о марках в формате JSON
  * @param {module:productInfo.ProductInfo} productInfo Информация о продукции
  * @param {string[]} markList Перечень считанных кодов марок
  */
-export class ActWriteOffPosition {
+export class ActWriteOffShopPosition {
     constructor(uuid: string,
-                actWriteOffUuid: string,
+                actWriteOffShopUuid: (string | null),
                 identity: (string | null),
                 quantity: number,
-                informF2RegId: (string | null),
                 informF2MarkInfoJson: (string | null),
                 productInfo: ProductInfo,
                 markList: string[]) {
         this.uuid = uuid;
-        this.actWriteOffUuid = actWriteOffUuid;
+        this.actWriteOffShopUuid = actWriteOffShopUuid;
         this.identity = identity;
         this.quantity = quantity;
-        this.informF2RegId = informF2RegId;
         this.informF2MarkInfoJson = informF2MarkInfoJson;
         this.productInfo = productInfo;
         this.markList = markList;
     }
 }
-

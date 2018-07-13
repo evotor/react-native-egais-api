@@ -1,62 +1,35 @@
 import {FilterBuilder, SortOrder} from "abstract-query-builder"
-import {ActWriteOffShop, ActWriteOffShopPosition} from "../model/document/ActWriteOff"
+import ActWriteOffShop, {ActWriteOffShopPosition} from "../model/document/ActWriteOffShop"
 import {ActWriteOffStatus, ActWriteOffType} from "../model/types"
 import {ProductInfoFilter, ProductInfoInnerSortOrder} from "./inner/ProductInfo"
-import defaultExecutor from "./defaultExecutor"
+import {quantityConverter} from "./converters"
+import executor from "./executor"
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:actWriteOff.ActWriteOffShopSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} uuid Уникальный идентификатор акта списания из магазина
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} docOwner Отправитель акта списания из магазина
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} identity Идентификатор акта списания из магазина (клиентский, к заполнению необязательный)
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} number Номер документа
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} actDate Дата составления
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} type Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} note Примечание
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} status Статус акта списания
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} rejectComment Комментарий для отказа на акт списания из магазина
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopSortOrder>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export class ActWriteOffShopSortOrder extends SortOrder<ActWriteOffShopSortOrder> {
 
-    /**
-     * Уникальный идентификатор акта списания из магазина
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * Отправитель акта списания из магазина
-     */
     docOwner = this.addFieldSorter("OWNER");
-
-    /**
-     * Идентификатор акта списания из магазина (клиентский, к заполнению необязательный)
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Номер документа
-     */
     number = this.addFieldSorter("NUMBER");
-
-    /**
-     * Дата составления
-     */
     actDate = this.addFieldSorter("ACT_DATE");
-
-    /**
-     * Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
-     */
     type = this.addFieldSorter("TYPE_WRITE_OFF");
-
-    /**
-     * Примечание
-     */
     note = this.addFieldSorter("NOTE");
-
-    /**
-     * Статус акта списания
-     */
     status = this.addFieldSorter("STATUS");
-
-    /**
-     * Комментарий для отказа на акт списания из магазина
-     */
     rejectComment = this.addFieldSorter("REJECT_COMMENT");
-
-    /**
-     * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-     */
     replyId = this.addFieldSorter("REPLY_ID");
 
     constructor() {
@@ -66,99 +39,55 @@ export class ActWriteOffShopSortOrder extends SortOrder<ActWriteOffShopSortOrder
 }
 
 /**
- * Класс для формирования запроса на получение актов списания из магазина
+ * @class module:actWriteOff.ActWriteOffShopQuery
+ * @classdesc Класс для формирования запроса на получение актов списания из магазина.
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} uuid Уникальный идентификатор акта списания из магазина
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} docOwner Отправитель акта списания из магазина
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} identity Идентификатор акта списания из магазина (клиентский, к заполнению необязательный)
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} number Номер документа
+ * @property {FieldFilter<Date, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} actDate Дата составления
+ * @property {FieldFilter<module:actWriteOff#ActWriteOffType, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} type Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} note Примечание
+ * @property {FieldFilter<module:actWriteOff#ActWriteOffStatus, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} status Статус акта списания
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} rejectComment Комментарий для отказа на акт списания из магазина
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopQuery, module:actWriteOff.ActWriteOffShopSortOrder, module:actWriteOff.ActWriteOffShop>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export default class ActWriteOffShopQuery extends FilterBuilder<ActWriteOffShopQuery, ActWriteOffShopSortOrder, ActWriteOffShop> {
 
-    /**
-     * Уникальный идентификатор акта списания из магазина
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * Отправитель акта списания из магазина
-     */
     docOwner = this.addFieldFilter<string>("OWNER");
-
-    /**
-     * Идентификатор акта списания из магазина (клиентский, к заполнению необязательный)
-     */
     identity = this.addFieldFilter<(string | null)>("IDENTITY");
-
-    /**
-     * Номер документа
-     */
     number = this.addFieldFilter<(string | null)>("NUMBER");
-
-    /**
-     * Дата составления
-     */
     actDate = this.addFieldFilter<Date>("ACT_DATE");
-
-    /**
-     * Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
-     */
     type = this.addFieldFilter<(ActWriteOffType | null)>("TYPE_WRITE_OFF");
-
-    /**
-     * Примечание
-     */
     note = this.addFieldFilter<(string | null)>("NOTE");
-
-    /**
-     * Статус акта списания
-     */
     status = this.addFieldFilter<ActWriteOffStatus>("STATUS");
-
-    /**
-     * Комментарий для отказа на акт списания из магазина
-     */
     rejectComment = this.addFieldFilter<(string | null)>("REJECT_COMMENT");
-
-    /**
-     * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-     */
     replyId = this.addFieldFilter<(string | null)>("REPLY_ID");
 
     constructor() {
-        super(() => this, defaultExecutor('ActWriteOffShop', ActWriteOffShop.prototype));
+        super(() => this, executor('ActWriteOffShop', ActWriteOffShop.prototype));
     }
 
 }
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:actWriteOff.ActWriteOffShopPositionSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopPositionSortOrder>} uuid Уникальный идентификатор позиции акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopPositionSortOrder>} actWriteOffShopUuid Уникальный идентификатор акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopPositionSortOrder>} identity Идентификатор позиции акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopPositionSortOrder>} quantity Количество
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffShopPositionSortOrder>} informF2MarkInfoJson Информация о марках в формате JSON
+ * @property {module:productInfo.ProductInfoInnerSortOrder<module:actWriteOff.ActWriteOffShopPositionSortOrder>} productInfo Информация о продукции
  */
 export class ActWriteOffShopPositionSortOrder extends SortOrder<ActWriteOffShopPositionSortOrder> {
 
-    /**
-     * Уникальный идентификатор позиции акта списания со склада
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * Уникальный идентификатор акта списания со склада
-     */
     actWriteOffShopUuid = this.addFieldSorter("ACT_WRITE_OFF_SHOP_UUID");
-
-    /**
-     * Идентификатор позиции акта списания со склада
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Количество
-     */
     quantity = this.addFieldSorter("QUANTITY");
-
-    /**
-     * Информация о марках в формате JSON
-     */
     informF2MarkInfoJson = this.addFieldSorter("INFORM_F2_MARK_INFO_JSON");
-
-    /**
-     * Информация о продукции
-     */
     productInfo = this.addInnerSortOrder(new ProductInfoInnerSortOrder<ActWriteOffShopPositionSortOrder>());
 
     constructor() {
@@ -168,42 +97,26 @@ export class ActWriteOffShopPositionSortOrder extends SortOrder<ActWriteOffShopP
 }
 
 /**
- * Класс для формирования запроса на получение позиций акта списания из магазина
+ * @class module:actWriteOff.ActWriteOffShopPositionQuery
+ * @classdesc Класс для формирования запроса на получение позиций акта списания из магазина.
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} uuid Уникальный идентификатор позиции акта списания со склада
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} actWriteOffShopUuid Уникальный идентификатор акта списания со склада
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} identity Идентификатор позиции акта списания со склада
+ * @property {FieldFilter<number, module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} quantity Количество
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} informF2MarkInfoJson Информация о марках в формате JSON
+ * @property {module:productInfo.ProductInfoFilter<module:actWriteOff.ActWriteOffShopPositionQuery, module:actWriteOff.ActWriteOffShopPositionSortOrder, module:actWriteOff.ActWriteOffShopPosition>} productInfo Информация о продукции
  */
 export class ActWriteOffShopPositionQuery extends FilterBuilder<ActWriteOffShopPositionQuery, ActWriteOffShopPositionSortOrder, ActWriteOffShopPosition> {
 
-    /**
-     * Уникальный идентификатор позиции акта списания из магазина
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * Уникальный идентификатор акта списания из магазина
-     */
     actWriteOffShopUuid = this.addFieldFilter<string>("ACT_WRITE_OFF_SHOP_UUID");
-
-    /**
-     * Идентификатор позиции акта списания из магазина (клиентский, к заполнению необязательный)
-     */
     identity = this.addFieldFilter<(string | null)>("IDENTITY");
-
-    /**
-     * Количество
-     */
-    quantity = this.addFieldFilter<number>("QUANTITY", (v) => v * 1000);
-
-    /**
-     * Информация о марках в формате JSON
-     */
+    quantity = this.addFieldFilter<number>("QUANTITY", quantityConverter);
     informF2MarkInfoJson = this.addFieldFilter<(string | null)>("INFORM_F2_MARK_INFO_JSON");
-
-    /**
-     * Информация о продукции
-     */
     productInfo = this.addInnerFilterBuilder(new ProductInfoFilter<ActWriteOffShopPositionQuery, ActWriteOffShopPositionSortOrder, ActWriteOffShopPosition>());
 
     constructor() {
-        super(() => this, defaultExecutor('ActWriteOffShopPosition', ActWriteOffShopPosition.prototype));
+        super(() => this, executor('ActWriteOffShopPosition', ActWriteOffShopPosition.prototype));
     }
 
 }

@@ -1,4 +1,5 @@
-import ClientSettings from "./ClientSettings"
+//Targeting commit: https://github.com/evotor/egais-api/commit/c2d5e84012cb2d3d197a1d079a17a0993c596a55
+import ClientSettings from "./query/ClientSettings"
 
 import {
     ActChargeOnShopStatus,
@@ -27,9 +28,14 @@ import {OrgInfoAddressFilter, OrgInfoAddressSortOrder} from "./query/inner/OrgIn
 import ProductInfo from "./model/dictionary/ProductInfo"
 import {ProductInfoQuery, ProductInfoSortOrder} from "./query/ProductInfo"
 import ProductRest, {ShopCommodity, StockCommodity} from './model/dictionary/ProductRest'
-import {ProductRestQuery, ProductRestSortOrder} from "./query/ProductRest"
-import {ShopCommodityQuery, ShopCommoditySortOrder} from "./query/ShopCommodity"
-import {StockCommodityQuery, StockCommoditySortOrder} from "./query/StockCommodity"
+import {
+    ProductRestQuery,
+    ProductRestSortOrder,
+    ShopCommodityQuery,
+    ShopCommoditySortOrder,
+    StockCommodityQuery,
+    StockCommoditySortOrder
+} from "./query/ProductRest"
 
 import Waybill, {WaybillPosition, WaybillPositionMark} from './model/document/Waybill'
 import WaybillQuery, {
@@ -60,7 +66,7 @@ import {
     ActChargeOnShopQuery,
     ActChargeOnShopSortOrder
 } from "./query/ActChargeOnShop"
-import ActWriteOff, {ActWriteOffPosition, ActWriteOffShop, ActWriteOffShopPosition} from './model/document/ActWriteOff'
+import ActWriteOff, {ActWriteOffPosition} from './model/document/ActWriteOff'
 import ActWriteOffQuery, {
     ActWriteOffPositionQuery,
     ActWriteOffPositionSortOrder,
@@ -85,6 +91,7 @@ import TransferToShopQuery, {
 } from './query/TransferToShop'
 import Ticket, {ConfirmTicket} from "./model/document/Ticket"
 import TicketQuery, {ConfirmTicketQuery, ConfirmTicketSortOrder, TicketSortOrder} from "./query/Ticket"
+import ActWriteOffShop, {ActWriteOffShopPosition} from "./model/document/ActWriteOffShop";
 
 export {
     ActChargeOnShopStatus,

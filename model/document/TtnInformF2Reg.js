@@ -1,23 +1,23 @@
 import {TtnInformF2RegStatus} from "../types";
 
 /**
- * Справка 2 Информация о предыдущих отгрузках
- *
- * @property uuid уникальный идентификатор
- * @property docOwner кто подает документы
- * @property identity ИД накладной(клиентский, исходной накладной, если заполнялся)
- * @property wbRegId ИД накладной в системе (присвоенный)
- * @property egaisFixNumber Номер фиксации накладной(отгрузки) в ЕГАИС
- * @property egaisFixDate Дата составления накладной(отгрузки) в ЕГАИС
- * @property wbNumber Номер накладной
- * @property wbDate Дата составления накладной
- * @property shipperId Грузоотправитель
- * @property consigneeId Грузополучатель
- * @property supplierId Поставщик
- * @property wayBillId уникальный идентификатор ТТН
+ * @class module:waybill.TtnInformF2Reg
+ * @classdesc Справка 2 Информация о предыдущих отгрузках.
+ * @param {string} uuid уникальный идентификатор
+ * @param {?string} docOwner кто подает документы
+ * @param {?string} identity ИД накладной(клиентский, исходной накладной, если заполнялся)
+ * @param {string} wbRegId ИД накладной в системе (присвоенный)
+ * @param {?string} egaisFixNumber Номер фиксации накладной(отгрузки) в ЕГАИС
+ * @param {?string} egaisFixDate Дата составления накладной(отгрузки) в ЕГАИС
+ * @param {?string} wbNumber Номер накладной
+ * @param {?Date} wbDate Дата составления накладной
+ * @param {?string} shipperId Грузоотправитель
+ * @param {?string} consigneeId Грузополучатель
+ * @param {?string} supplierId Поставщик
+ * @param {?string} wayBillId Уникальный идентификатор ТТН
+ * @param {?string} status Статус
  */
 export default class TtnInformF2Reg {
-
     constructor(uuid: string,
                 docOwner: string,
                 identity: (string | null),
@@ -45,15 +45,15 @@ export default class TtnInformF2Reg {
         this.waybillId = waybillId;
         this.status = status;
     }
-
 }
 
 /**
- * Позиция в Справке 2 Информации о предыдущих отгрузках
- * @property uuid Уникальный идентификатор позиции
- * @property ttnInformF2RegUuid Уникальный идентификатор справки Б
- * @property identity Идентификатор позиции внутри накладной
- * @property informF2RegId Регистрационный номер записи справки Б
+ * @class module:waybill.TtnInformF2RegPosition
+ * @classdesc Позиция в Справке 2 Информации о предыдущих отгрузках.
+ * @param {string} uuid Уникальный идентификатор позиции
+ * @param {string} ttnInformF2RegUuid Уникальный идентификатор справки Б
+ * @param {string} identity Идентификатор позиции внутри накладной
+ * @param {string} informF2RegId Регистрационный номер записи справки Б
  */
 export class TtnInformF2RegPosition {
     constructor(uuid: string,

@@ -1,17 +1,21 @@
+/**
+ * Классы и типы для работы с информацией о продукции.
+ * @module module:productInfo
+ */
 import {ProductType} from "../types"
 
 /**
- * Информация о продукции
- *
- * @property type Тип продукции (АП | ССП | ССНП | Спирт) Если не указано, то АП
- * @property fullName Наименование продукции полное
- * @property shortName Наименование продукции краткое
- * @property alcCode Код продукции согласно ЕГАИС
- * @property capacity Емкость упаковки продукции согласно ЕГАИС
- * @property alcVolume Содержание этилового спирта, %
- * @property producerId Производитель
- * @property importerId Импортер
- * @property productVCode Код вида продукции.
+ * @class module:productInfo.ProductInfo
+ * @classdesc Информация о продукции.
+ * @param {module:productInfo#ProductType} type Тип продукции (АП | ССП | ССНП | Спирт) Если не указано, то АП
+ * @param {?string} fullName Наименование продукции полное
+ * @param {?string} shortName Наименование продукции краткое
+ * @param {string} alcCode Код продукции согласно ЕГАИС
+ * @param {?string} capacity Емкость упаковки продукции согласно ЕГАИС
+ * @param {?string} alcVolume Содержание этилового спирта, %
+ * @param {?string} producerId Производитель
+ * @param {?string} importerId Импортер
+ * @param {?string} productVCode Код вида продукции
  */
 export default class ProductInfo {
     constructor(type: ProductType,
@@ -34,11 +38,9 @@ export default class ProductInfo {
         this.productVCode = productVCode;
     }
 
-    _DASH = "-";
-
-    createDescription(productInfo?: ProductInfo): string {
+    static createDescription(productInfo?: ProductInfo): string {
         if (!productInfo) {
-            return this._DASH;
+            return "-";
         }
         const shortName = productInfo.shortName ? productInfo.shortName.trim() : null;
         const b = productInfo.fullName ? productInfo.fullName.trim() === "" : null;
@@ -47,7 +49,7 @@ export default class ProductInfo {
         } else if (b !== null && !b) {
             return productInfo.fullName;
         } else {
-            return this._DASH;
+            return "-"
         }
     }
 

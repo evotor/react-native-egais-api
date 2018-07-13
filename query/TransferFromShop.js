@@ -13,49 +13,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var abstract_query_builder_1 = require("abstract-query-builder");
 var TransferFromShop_1 = require("../model/document/TransferFromShop");
 var ProductInfo_1 = require("./inner/ProductInfo");
-var defaultExecutor_1 = require("./defaultExecutor");
+var converters_1 = require("./converters");
+var executor_1 = require("./executor");
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:transfer.TransferFromShopSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} uuid Уникальный идентификатор
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} owner Кто подает документы
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} identity Идентификатор документа (клиентский)
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} transferNumber Номер документа
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} transferDate Дата составления
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} note Примечание
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} status Статус обработки документа
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} rejectComment Комментарий для отказа
+ * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 var TransferFromShopSortOrder = /** @class */ (function (_super) {
     __extends(TransferFromShopSortOrder, _super);
     function TransferFromShopSortOrder() {
         var _this = _super.call(this, function () { return _this; }) || this;
-        /**
-         * Уникальный идентификатор
-         */
         _this.uuid = _this.addFieldSorter("UUID");
-        /**
-         * Кто подает документы
-         */
         _this.owner = _this.addFieldSorter("OWNER");
-        /**
-         * Идентификатор документа (клиентский)
-         */
         _this.identity = _this.addFieldSorter("IDENTITY");
-        /**
-         * Номер документа
-         */
         _this.transferNumber = _this.addFieldSorter("NUMBER");
-        /**
-         * Дата составления
-         */
         _this.transferDate = _this.addFieldSorter("ACT_DATE");
-        /**
-         * Примечание
-         */
         _this.note = _this.addFieldSorter("NOTE");
-        /**
-         * Статус обработки документа
-         */
         _this.status = _this.addFieldSorter("STATUS");
-        /**
-         * Комментарий для отказа на акт списания из магазина
-         */
         _this.rejectComment = _this.addFieldSorter("REJECT_COMMENT");
-        /**
-         * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-         */
         _this.replyId = _this.addFieldSorter("REPLY_ID");
         return _this;
     }
@@ -63,47 +47,30 @@ var TransferFromShopSortOrder = /** @class */ (function (_super) {
 }(abstract_query_builder_1.SortOrder));
 exports.TransferFromShopSortOrder = TransferFromShopSortOrder;
 /**
- * Класс для формирования запроса на получение актов списания из магазина
+ * @class module:transfer.TransferFromShopQuery
+ * @classdesc Класс для формирования запроса на получение документов передачи продукции из торгового зала на склад.
+ * @property {FieldFilter<string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} uuid Уникальный идентификатор
+ * @property {FieldFilter<string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} owner Кто подает документы
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} identity Идентификатор документа (клиентский)
+ * @property {FieldFilter<string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} transferNumber Номер документа
+ * @property {FieldFilter<?Date, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} transferDate Дата составления
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} note Примечание
+ * @property {FieldFilter<module:transfer#TransferStatus, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} status Статус обработки документа
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} rejectComment Комментарий для отказа
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopQuery, module:transfer.TransferFromShopSortOrder, module:transfer.TransferFromShop>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 var TransferFromShopQuery = /** @class */ (function (_super) {
     __extends(TransferFromShopQuery, _super);
     function TransferFromShopQuery() {
-        var _this = _super.call(this, function () { return _this; }, defaultExecutor_1.default('TransferFromShop', TransferFromShop_1.default.prototype)) || this;
-        /**
-         * Уникальный идентификатор
-         */
+        var _this = _super.call(this, function () { return _this; }, executor_1.default('TransferFromShop', TransferFromShop_1.default.prototype)) || this;
         _this.uuid = _this.addFieldFilter("UUID");
-        /**
-         * Кто подает документы
-         */
         _this.owner = _this.addFieldFilter("OWNER");
-        /**
-         * Идентификатор документа (клиентский)
-         */
         _this.identity = _this.addFieldFilter("IDENTITY");
-        /**
-         * Номер документа
-         */
         _this.transferNumber = _this.addFieldFilter("NUMBER");
-        /**
-         * Дата составления
-         */
         _this.transferDate = _this.addFieldFilter("TRANSFER_DATE");
-        /**
-         * Примечание
-         */
         _this.note = _this.addFieldFilter("NOTE");
-        /**
-         * Статус обработки документа
-         */
         _this.status = _this.addFieldFilter("STATUS");
-        /**
-         * Комментарий для отказа
-         */
         _this.rejectComment = _this.addFieldFilter("REJECT_COMMENT");
-        /**
-         * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-         */
         _this.replyId = _this.addFieldFilter("REPLY_ID");
         return _this;
     }
@@ -111,35 +78,24 @@ var TransferFromShopQuery = /** @class */ (function (_super) {
 }(abstract_query_builder_1.FilterBuilder));
 exports.default = TransferFromShopQuery;
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:transfer.TransferFromShopPositionSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} transferFromShopUuid Уникальный идентификатор документа передачи
+ * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} identity Идентификатор позиции внутри акта
+ * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} productCode Регистрационный код продукции
+ * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} quantity Количество
+ * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {module:productInfo.ProductInfoInnerSortOrder<module:transfer.TransferFromShopPositionSortOrder>} productInfo Информация о продукции
  */
 var TransferFromShopPositionSortOrder = /** @class */ (function (_super) {
     __extends(TransferFromShopPositionSortOrder, _super);
     function TransferFromShopPositionSortOrder() {
         var _this = _super.call(this, function () { return _this; }) || this;
-        /**
-         * Уникальный идентификатор документа передачи
-         */
         _this.transferFromShopUuid = _this.addFieldSorter("TRANSFER_FROM_SHOP_ID");
-        /**
-         * Идентификатор позиции внутри акта
-         */
         _this.identity = _this.addFieldSorter("IDENTITY");
-        /**
-         * Регистрационный код продукции
-         */
         _this.productCode = _this.addFieldSorter("PRODUCT_CODE");
-        /**
-         * Количество
-         */
         _this.quantity = _this.addFieldSorter("QUANTITY");
-        /**
-         * Регистрационный номер раздела справки 2
-         */
         _this.informF2RegId = _this.addFieldSorter("INFORM_F2_REG_ID");
-        /**
-         * Информация о продукции
-         */
         _this.productInfo = _this.addInnerSortOrder(new ProductInfo_1.ProductInfoInnerSortOrder());
         return _this;
     }
@@ -147,35 +103,24 @@ var TransferFromShopPositionSortOrder = /** @class */ (function (_super) {
 }(abstract_query_builder_1.SortOrder));
 exports.TransferFromShopPositionSortOrder = TransferFromShopPositionSortOrder;
 /**
- * Класс для формирования запроса на получение позиций акта списания из магазина
+ * @class module:transfer.TransferFromShopPositionQuery
+ * @classdesc Класс для формирования запроса на получение позиций документа передачи продукции из торгового зала на склад.
+ * @property {FieldFilter<string, module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} transferFromShopUuid Уникальный идентификатор документа передачи
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} identity Идентификатор позиции внутри акта
+ * @property {FieldFilter<string, module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} productCode Регистрационный код продукции
+ * @property {FieldFilter<number, module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} quantity Количество
+ * @property {FieldFilter<?string, module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {module:productInfo.ProductInfoFilter<module:transfer.TransferFromShopPositionQuery, module:transfer.TransferFromShopPositionSortOrder, module:transfer.TransferFromShopPosition>} productInfo Информация о продукции
  */
 var TransferFromShopPositionQuery = /** @class */ (function (_super) {
     __extends(TransferFromShopPositionQuery, _super);
     function TransferFromShopPositionQuery() {
-        var _this = _super.call(this, function () { return _this; }, defaultExecutor_1.default('TransferFromShopPosition', TransferFromShop_1.TransferFromShopPosition.prototype)) || this;
-        /**
-         * Уникальный идентификатор документа передачи
-         */
+        var _this = _super.call(this, function () { return _this; }, executor_1.default('TransferFromShopPosition', TransferFromShop_1.TransferFromShopPosition.prototype)) || this;
         _this.transferFromShopUuid = _this.addFieldFilter("TRANSFER_FROM_SHOP_ID");
-        /**
-         * Идентификатор позиции внутри акта
-         */
         _this.identity = _this.addFieldFilter("IDENTITY");
-        /**
-         * Регистрационный код продукции
-         */
         _this.productCode = _this.addFieldFilter("PRODUCT_CODE");
-        /**
-         * Количество
-         */
-        _this.quantity = _this.addFieldFilter("QUANTITY", function (v) { return v * 1000; });
-        /**
-         * Регистрационный номер раздела справки 2
-         */
+        _this.quantity = _this.addFieldFilter("QUANTITY", converters_1.quantityConverter);
         _this.informF2RegId = _this.addFieldFilter("INFORM_F2_REG_ID");
-        /**
-         * Информация о продукции
-         */
         _this.productInfo = _this.addInnerFilterBuilder(new ProductInfo_1.ProductInfoFilter());
         return _this;
     }

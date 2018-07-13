@@ -1,67 +1,36 @@
 import {FilterBuilder, SortOrder} from "abstract-query-builder"
 import OrgInfo, {OrgInfoAddress} from "../model/dictionary/OrgInfo"
 import {OrgType, WaybillTypeUsed} from "../model/types"
-import defaultExecutor from "./defaultExecutor"
+import executor from "./executor"
 import {OrgInfoAddressFilter, OrgInfoAddressSortOrder} from "./inner/OrgInfoAddress"
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:orgInfo.OrgInfoSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} type Тип организации (Юридическое лицо/Индивидуальный предприниматель/Иностранец (исключая таможенный союз)/Таможенный союз)
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} clientRegId Код организации
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} fullName Наименование организации полное (в верхнем регистре)
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} shortName Наименование организации краткое (в верхнем регистре)
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} inn ИНН
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} kpp КПП
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} unp УНП для респ.Беларусь
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} rnn РНН(БИН/ИИН) для респ.Казахстан
+ * @property {module:orgInfo.OrgInfoAddressSortOrder<module:orgInfo.OrgInfoSortOrder>} address Фактический адрес
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} state Статус: действующая или удалена
+ * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} waybillVersion Версия протокола для накладных: 1, 2 или 3
  */
 export class OrgInfoSortOrder extends SortOrder<OrgInfoSortOrder> {
 
-    /**
-     * Тип организации (Юридическое лицо/Индивидуальный предприниматель/Иностранец (исключая таможенный союз)/Таможенный союз)
-     */
     type = this.addFieldSorter("TYPE");
-
-    /**
-     * Код организации
-     */
     clientRegId = this.addFieldSorter("CLIENT_REG_ID");
-
-    /**
-     * Наименование организации полное (в верхнем регистре)
-     */
     fullName = this.addFieldSorter("FULL_NAME_UPPER_CASE");
-
-    /**
-     * Наименование организации краткое (в верхнем регистре)
-     */
     shortName = this.addFieldSorter("SHORT_NAME_UPPER_CASE");
-
-    /**
-     * ИНН
-     */
     inn = this.addFieldSorter("INN");
-
-    /**
-     * КПП
-     */
     kpp = this.addFieldSorter("KPP");
-
-    /**
-     * УНП для респ.Беларусь
-     */
     unp = this.addFieldSorter("UNP");
-
-    /**
-     * РНН(БИН/ИИН) для респ.Казахстан
-     */
     rnn = this.addFieldSorter("RNN");
-
-    /**
-     * Фактический адрес
-     */
     address = this.addInnerSortOrder(new OrgInfoAddressSortOrder<OrgInfoSortOrder>());
-
-    /**
-     * Статус: действующая или удалена
-     */
     state = this.addFieldSorter("STATE");
-
-    /**
-     * Версия протокола для накладных: 1, 2 или 3
-     */
     waybillVersion = this.addFieldSorter("VERSION_WB");
 
     constructor() {
@@ -71,67 +40,36 @@ export class OrgInfoSortOrder extends SortOrder<OrgInfoSortOrder> {
 }
 
 /**
- * Класс для формирования запроса на информацию об организациях
+ * @class module:orgInfo.OrgInfoQuery
+ * @classdesc Класс для формирования запроса на информацию об организациях.
+ * @property {FieldFilter<module:orgInfo#OrgType, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} type Тип организации (Юридическое лицо/Индивидуальный предприниматель/Иностранец (исключая таможенный союз)/Таможенный союз)
+ * @property {FieldFilter<string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} clientRegId Код организации
+ * @property {FieldFilter<string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} fullName Наименование организации полное (в верхнем регистре)
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} shortName Наименование организации краткое (в верхнем регистре)
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} inn ИНН
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} kpp КПП
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} unp УНП для респ.Беларусь
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} rnn РНН(БИН/ИИН) для респ.Казахстан
+ * @property {module:orgInfo.OrgInfoAddressFilter<module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} address Фактический адрес
+ * @property {FieldFilter<?string, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} state Статус: действующая или удалена
+ * @property {FieldFilter<?module:orgInfo#WaybillTypeUsed, module:orgInfo.OrgInfoQuery, module:orgInfo.OrgInfoSortOrder, module:orgInfo.OrgInfo>} waybillVersion Версия протокола для накладных: 1, 2 или 3
  */
 export class OrgInfoQuery extends FilterBuilder<OrgInfoQuery, OrgInfoSortOrder, OrgInfo> {
 
-    /**
-     * Тип организации (Юридическое лицо/Индивидуальный предприниматель/Иностранец (исключая таможенный союз)/Таможенный союз)
-     */
     type = this.addFieldFilter<OrgType>("TYPE");
-
-    /**
-     * Код организации
-     */
     clientRegId = this.addFieldFilter<string>("CLIENT_REG_ID");
-
-    /**
-     * Наименование организации полное (в верхнем регистре)
-     */
     fullName = this.addFieldFilter<string>("FULL_NAME_UPPER_CASE");
-
-    /**
-     * Наименование организации краткое (в верхнем регистре)
-     */
     shortName = this.addFieldFilter<(string | null)>("SHORT_NAME_UPPER_CASE");
-
-    /**
-     * ИНН
-     */
     inn = this.addFieldFilter<(string | null)>("INN");
-
-    /**
-     * КПП
-     */
     kpp = this.addFieldFilter<(string | null)>("KPP");
-
-    /**
-     * УНП для респ.Беларусь
-     */
     unp = this.addFieldFilter<(string | null)>("UNP");
-
-    /**
-     * РНН(БИН/ИИН) для респ.Казахстан
-     */
     rnn = this.addFieldFilter<(string | null)>("RNN");
-
-    /**
-     * Фактический адрес
-     */
     address = this.addInnerFilterBuilder(new OrgInfoAddressFilter<OrgInfoQuery, OrgInfoSortOrder, OrgInfo>());
-
-    /**
-     * Статус: действующая или удалена
-     */
     state = this.addFieldFilter<(string | null)>("STATE");
-
-    /**
-     * Версия протокола для накладных: 1, 2 или 3
-     */
     waybillVersion = this.addFieldFilter<(WaybillTypeUsed | null)>("VERSION_WB");
 
     constructor() {
-        super(() => this, defaultExecutor('OrgInfo', OrgInfo.prototype, {address: OrgInfoAddress.prototype}));
+        super(() => this, executor('OrgInfo', OrgInfo.prototype, {address: OrgInfoAddress.prototype}));
     }
 
 }

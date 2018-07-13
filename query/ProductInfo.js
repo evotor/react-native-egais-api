@@ -12,49 +12,32 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var abstract_query_builder_1 = require("abstract-query-builder");
 var ProductInfo_1 = require("../model/dictionary/ProductInfo");
-var defaultExecutor_1 = require("./defaultExecutor");
+var executor_1 = require("./executor");
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:productInfo.ProductInfoSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} type Тип продукции (АП | ССП | ССНП | Спирт)
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} fullName Наименование продукции полное (в верхнем регистре)
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} shortName Наименование продукции краткое (в верхнем регистре)
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} alcCode Код продукции согласно ЕГАИС
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} capacity Емкость упаковки продукции согласно ЕГАИС
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} alcVolume Содержание этилового спирта, %
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} producerId Производитель
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} importerId Импортер
+ * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} productVCode Код вида продукции
  */
 var ProductInfoSortOrder = /** @class */ (function (_super) {
     __extends(ProductInfoSortOrder, _super);
     function ProductInfoSortOrder() {
         var _this = _super.call(this, function () { return _this; }) || this;
-        /**
-         * Тип продукции (АП | ССП | ССНП | Спирт).
-         */
         _this.type = _this.addFieldSorter("TYPE");
-        /**
-         * Наименование продукции полное (в верхнем регистре).
-         */
         _this.fullName = _this.addFieldSorter("FULL_NAME_UPPER_CASE");
-        /**
-         * Наименование продукции краткое (в верхнем регистре).
-         */
         _this.shortName = _this.addFieldSorter("SHORT_NAME_UPPER_CASE");
-        /**
-         * Код продукции согласно ЕГАИС.
-         */
         _this.alcCode = _this.addFieldSorter("ALC_CODE");
-        /**
-         * Емкость упаковки продукции согласно ЕГАИС.
-         */
         _this.capacity = _this.addFieldSorter("CAPACITY");
-        /**
-         * Содержание этилового спирта, %.
-         */
         _this.alcVolume = _this.addFieldSorter("ALC_VOLUME");
-        /**
-         * Производитель.
-         */
         _this.producerId = _this.addFieldSorter("PRODUCER_CLIENT_REG_ID");
-        /**
-         * Импортер.
-         */
         _this.importerId = _this.addFieldSorter("IMPORTER_CLIENT_REG_ID");
-        /**
-         * Код вида продукции.
-         */
         _this.productVCode = _this.addFieldSorter("PRODUCT_V_CODE");
         return _this;
     }
@@ -62,47 +45,30 @@ var ProductInfoSortOrder = /** @class */ (function (_super) {
 }(abstract_query_builder_1.SortOrder));
 exports.ProductInfoSortOrder = ProductInfoSortOrder;
 /**
- * Класс для формирования запроса на информацию о товарах
+ * @class module:productInfo.ProductInfoQuery
+ * @classdesc Класс для формирования запроса на получение информации о продукции.
+ * @property {FieldFilter<module:productInfo#ProductType, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} type Тип продукции (АП | ССП | ССНП | Спирт)
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} fullName Наименование продукции полное (в верхнем регистре)
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} shortName Наименование продукции краткое (в верхнем регистре)
+ * @property {FieldFilter<string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} alcCode Код продукции согласно ЕГАИС
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} capacity Емкость упаковки продукции согласно ЕГАИС
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} alcVolume Содержание этилового спирта, %
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} producerId Производитель
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} importerId Импортер
+ * @property {FieldFilter<?string, module:productInfo.ProductInfoQuery, module:productInfo.ProductInfoSortOrder, module:productInfo.ProductInfo>} productVCode Код вида продукции
  */
 var ProductInfoQuery = /** @class */ (function (_super) {
     __extends(ProductInfoQuery, _super);
     function ProductInfoQuery() {
-        var _this = _super.call(this, function () { return _this; }, defaultExecutor_1.default('ProductInfo', ProductInfo_1.default.prototype)) || this;
-        /**
-         * Тип продукции (АП | ССП | ССНП | Спирт).
-         */
+        var _this = _super.call(this, function () { return _this; }, executor_1.default('ProductInfo', ProductInfo_1.default.prototype)) || this;
         _this.type = _this.addFieldFilter("TYPE");
-        /**
-         * Наименование продукции полное (в верхнем регистре).
-         */
         _this.fullName = _this.addFieldFilter("FULL_NAME_UPPER_CASE");
-        /**
-         * Наименование продукции краткое (в верхнем регистре).
-         */
         _this.shortName = _this.addFieldFilter("SHORT_NAME_UPPER_CASE");
-        /**
-         * Код продукции согласно ЕГАИС.
-         */
         _this.alcCode = _this.addFieldFilter("ALC_CODE");
-        /**
-         * Емкость упаковки продукции согласно ЕГАИС.
-         */
         _this.capacity = _this.addFieldFilter("CAPACITY");
-        /**
-         * Содержание этилового спирта, %.
-         */
         _this.alcVolume = _this.addFieldFilter("ALC_VOLUME");
-        /**
-         * Производитель.
-         */
         _this.producerId = _this.addFieldFilter("PRODUCER_CLIENT_REG_ID");
-        /**
-         * Импортер.
-         */
         _this.importerId = _this.addFieldFilter("IMPORTER_CLIENT_REG_ID");
-        /**
-         * Код вида продукции.
-         */
         _this.productVCode = _this.addFieldFilter("PRODUCT_V_CODE");
         return _this;
     }

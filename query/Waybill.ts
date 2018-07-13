@@ -1,107 +1,53 @@
 import {FilterBuilder, SortOrder} from "abstract-query-builder"
-import defaultExecutor from './defaultExecutor'
 import Waybill, {WaybillPosition, WaybillPositionMark} from '../model/document/Waybill'
 import {WaybillType, UnitType, WaybillStatus, WaybillResolution, Version, Direction} from "../model/types"
 import {ProductInfoFilter, ProductInfoInnerSortOrder} from "./inner/ProductInfo"
+import {quantityConverter, priceConverter} from "./converters"
+import executor from './executor'
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybill.WaybillSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} uuid UUID накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} docOwner Отправитель накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} identity дентификатор накладной (клиентский, к заполнению необязательный)
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} type Тип накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} unitType Тип упаковки
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} number Номер документа
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} date Дата составления
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} shippingDate Дата отгрузки продукции
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} shipperId Грузоотправитель
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} consigneeId Грузополучатель
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} supplierId Поставщик
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} base Основание
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} note Заметки
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} status Текущий статус накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} resolution Резолюция накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} ttnInformF2RegUuid Uuid справки 2 для накладной
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} wbRegId ИД накладной в системе ЕГАИС
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} direction Направление документа в представлении УТМ (входящий/исходящий)
+ * @property {FieldSorter<module:waybill.WaybillSortOrder>} version Версия протокола ЕГАИС, по которому отправлена накладная
  */
 export class WaybillSortOrder extends SortOrder<WaybillSortOrder> {
 
-    /**
-     * UUID накладной.
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * Отправитель накладной.
-     */
     docOwner = this.addFieldSorter("OWNER");
-
-    /**
-     * Идентификатор накладной (клиентский, к заполнению необязательный).
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Тип накладной.
-     */
     type = this.addFieldSorter("TYPE");
-
-    /**
-     * тип упаковки.
-     */
     unitType = this.addFieldSorter("UNIT_TYPE");
-
-    /**
-     * Номер документа.
-     */
     number = this.addFieldSorter("NUMBER");
-
-    /**
-     * Дата составления.
-     */
     date = this.addFieldSorter("DATE");
-
-    /**
-     * Дата отгрузки продукции.
-     */
     shippingDate = this.addFieldSorter("SHIPPING_DATE");
-
-    /**
-     * Грузоотправитель.
-     */
     shipperId = this.addFieldSorter("SHIPPER_ID");
-
-    /**
-     * Грузополучатель.
-     */
     consigneeId = this.addFieldSorter("CONSIGNEE_ID");
-
-    /**
-     * Поставщик.
-     */
     supplierId = this.addFieldSorter("SUPPLIER_ID");
-
-    /**
-     * Основание.
-     */
     base = this.addFieldSorter("BASE");
-
-    /**
-     * Заметки.
-     */
     note = this.addFieldSorter("NOTE");
-
-    /**
-     * Текущий статус накладной.
-     */
     status = this.addFieldSorter("STATUS");
-
-    /**
-     * Резолюция накладной.
-     */
     resolution = this.addFieldSorter("RESOLUTION");
-
-    /**
-     * uuid справки 2 для накладной.
-     */
     ttnInformF2RegUuid = this.addFieldSorter("TTN_INFORM_F2_REG_UUID");
-
-    /**
-     * ИД накладной в системе ЕГАИС.
-     */
     wbRegId = this.addFieldSorter("WB_REG_ID");
-
-    /**
-     * Направление документа в представлении УТМ (входящий/исходящий).
-     */
     direction = this.addFieldSorter("DIRECTION");
-
-    /**
-     * Версия протокола ЕГАИС, по которому отправлена накладная.
-     */
     version = this.addFieldSorter("VERSION");
 
     constructor() {
@@ -111,169 +57,83 @@ export class WaybillSortOrder extends SortOrder<WaybillSortOrder> {
 }
 
 /**
- * Класс для формирования запроса на получение ТТН
+ * @class module:waybill.WaybillQuery
+ * @classdesc Класс для формирования запроса на получение товарно-транспортных накладных.
+ * @property {FieldFilter<string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} uuid UUID накладной
+ * @property {FieldFilter<string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} docOwner Отправитель накладной
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} identity дентификатор накладной (клиентский, к заполнению необязательный)
+ * @property {FieldFilter<module:waybill#WaybillType, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} type Тип накладной
+ * @property {FieldFilter<?module:waybill#UnitType, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} unitType Тип упаковки
+ * @property {FieldFilter<string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} number Номер документа
+ * @property {FieldFilter<Date, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} date Дата составления
+ * @property {FieldFilter<Date, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} shippingDate Дата отгрузки продукции
+ * @property {FieldFilter<string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} shipperId Грузоотправитель
+ * @property {FieldFilter<string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} consigneeId Грузополучатель
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} supplierId Поставщик
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} base Основание
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} note Заметки
+ * @property {FieldFilter<module:waybill#WaybillStatus, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} status Текущий статус накладной
+ * @property {FieldFilter<module:waybill#WaybillResolution, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} resolution Резолюция накладной
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} ttnInformF2RegUuid Uuid справки 2 для накладной
+ * @property {FieldFilter<?string, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} wbRegId ИД накладной в системе ЕГАИС
+ * @property {FieldFilter<module:waybill#Direction, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} direction Направление документа в представлении УТМ (входящий/исходящий)
+ * @property {FieldFilter<Version, module:waybill.WaybillQuery, module:waybill.WaybillSortOrder, module:waybill.Waybill>} version Версия протокола ЕГАИС, по которому отправлена накладная
  */
 export default class WaybillQuery extends FilterBuilder<WaybillQuery, WaybillSortOrder, Waybill> {
 
-    /**
-     * UUID накладной.
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * Отправитель накладной.
-     */
     docOwner = this.addFieldFilter<string>("OWNER");
-
-    /**
-     * Идентификатор накладной (клиентский, к заполнению необязательный).
-     */
     identity = this.addFieldFilter<(string | null)>("IDENTITY");
-
-    /**
-     * Тип накладной.
-     */
     type = this.addFieldFilter<WaybillType>("TYPE");
-
-    /**
-     * тип упаковки.
-     */
     unitType = this.addFieldFilter<UnitType | null>("UNIT_TYPE");
-
-    /**
-     * Номер документа.
-     */
     number = this.addFieldFilter<string>("NUMBER");
-
-    /**
-     * Дата составления.
-     */
     date = this.addFieldFilter<Date>("DATE");
-
-    /**
-     * Дата отгрузки продукции.
-     */
     shippingDate = this.addFieldFilter<Date>("SHIPPING_DATE");
-
-    /**
-     * Грузоотправитель.
-     */
     shipperId = this.addFieldFilter<string>("SHIPPER_ID");
-
-    /**
-     * Грузополучатель.
-     */
     consigneeId = this.addFieldFilter<string>("CONSIGNEE_ID");
-
-    /**
-     * Поставщик.
-     */
     supplierId = this.addFieldFilter<(string | null)>("SUPPLIER_ID");
-
-    /**
-     * Основание.
-     */
     base = this.addFieldFilter<(string | null)>("BASE");
-
-    /**
-     * Заметки.
-     */
     note = this.addFieldFilter<(string | null)>("NOTE");
-
-    /**
-     * Текущий статус накладной.
-     */
     status = this.addFieldFilter<WaybillStatus>("STATUS");
-
-    /**
-     * Резолюция накладной.
-     */
     resolution = this.addFieldFilter<WaybillResolution>("RESOLUTION");
-
-    /**
-     * uuid справки 2 для накладной.
-     */
     ttnInformF2RegUuid = this.addFieldFilter<(string | null)>("TTN_INFORM_F2_REG_UUID");
-
-    /**
-     * ИД накладной в системе ЕГАИС.
-     */
     wbRegId = this.addFieldFilter<(string | null)>("WB_REG_ID");
-
-    /**
-     * Направление документа в представлении УТМ (входящий/исходящий).
-     */
     direction = this.addFieldFilter<Direction>("DIRECTION");
-
-    /**
-     * Версия протокола ЕГАИС, по которому отправлена накладная.
-     */
     version = this.addFieldFilter<Version>("VERSION");
 
     constructor() {
-        super(() => this, defaultExecutor('WayBill', Waybill.prototype));
+        super(() => this, executor('WayBill', Waybill.prototype));
     }
 
 }
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybill.WaybillPositionSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} uuid UUID позиции накладной
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} waybillUuid UUID накладной
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} productIdentity Идентификатор внутри файла
+ * @property {module:productInfo.ProductInfoInnerSortOrder<module:waybill.WaybillPositionSortOrder>} productInfo Информация о продукции
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} packId Идентификатор упаковки
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} quantity Количество
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} price Цена за единицу товара
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} party Номер партии
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} identity Идентификатор позиции внутри накладной
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} informF1RegId Справка 1. Не может быть null
+ * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} informF2RegId Регистрационный номер раздела справки 2, по которому продукция была получена отправителем
  */
 export class WaybillPositionSortOrder extends SortOrder<WaybillPositionSortOrder> {
 
-    /**
-     * UUID позиции накладной.
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * UUID накладной.
-     */
     waybillUuid = this.addFieldSorter("WAY_BILL_UUID");
-
-    /**
-     * Идентификатор внутри файла.
-     */
     productIdentity = this.addFieldSorter("PRODUCT_INFO_IDENTITY");
-
-    /**
-     * Информация о продукции
-     */
     productInfo = this.addInnerSortOrder(new ProductInfoInnerSortOrder<WaybillPositionSortOrder>());
-
-    /**
-     * Идентификатор упаковки.
-     */
     packId = this.addFieldSorter("PACK_ID");
-
-    /**
-     * Количество.
-     */
     quantity = this.addFieldSorter("QUANTITY");
-
-    /**
-     * Цена за единицу товара.
-     */
     price = this.addFieldSorter("PRICE");
-
-    /**
-     * Номер партии.
-     */
     party = this.addFieldSorter("PARTY");
-
-    /**
-     * Идентификатор позиции внутри накладной.
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Справка 1. Не может быть null
-     */
     informF1RegId = this.addFieldSorter("INFORM_F1_REG_ID");
-
-    /**
-     * Регистрационный номер раздела справки 2, по которому продукция была получена отправителем.
-     */
     informF2RegId = this.addFieldSorter("INFORM_F2_REG_ID");
 
     constructor() {
@@ -283,89 +143,51 @@ export class WaybillPositionSortOrder extends SortOrder<WaybillPositionSortOrder
 }
 
 /**
- * Класс для формирования запроса на получение позиций ТТН
+ * @class module:waybill.WaybillPositionQuery
+ * @classdesc Класс для формирования запроса на получение позиций ТТН.
+ * @property {FieldFilter<string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} uuid UUID позиции накладной
+ * @property {FieldFilter<string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} waybillUuid UUID накладной
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} productIdentity Идентификатор внутри файла
+ * @property {module:productInfo.ProductInfoFilter<module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} productInfo Информация о продукции
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} packId Идентификатор упаковки
+ * @property {FieldFilter<number, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} quantity Количество
+ * @property {FieldFilter<number, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} price Цена за единицу товара
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} party Номер партии
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} identity Идентификатор позиции внутри накладной
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} informF1RegId Справка 1. Не может быть null
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionQuery, module:waybill.WaybillPositionSortOrder, module:waybill.WaybillPosition>} informF2RegId Регистрационный номер раздела справки 2, по которому продукция была получена отправителем
  */
 export class WaybillPositionQuery extends FilterBuilder<WaybillPositionQuery, WaybillPositionSortOrder, WaybillPosition> {
 
-    /**
-     * UUID позиции накладной.
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * UUID накладной.
-     */
     waybillUuid = this.addFieldFilter<string>("WAY_BILL_UUID");
-
-    /**
-     * Идентификатор внутри файла.
-     */
     productIdentity = this.addFieldFilter<(string | null)>("PRODUCT_INFO_IDENTITY");
-
-    /**
-     * Информация о продукции
-     */
     productInfo = this.addInnerFilterBuilder(new ProductInfoFilter<WaybillPositionQuery, WaybillPositionSortOrder, WaybillPosition>());
-
-    /**
-     * Идентификатор упаковки.
-     */
     packId = this.addFieldFilter<(string | null)>("PACK_ID");
-
-    /**
-     * Количество.
-     */
-    quantity = this.addFieldFilter<number>("QUANTITY", (v) => v * 1000);
-
-    /**
-     * Цена за единицу товара.
-     */
-    price = this.addFieldFilter<number>("PRICE", (v) => v * 100);
-
-    /**
-     * Номер партии.
-     */
+    quantity = this.addFieldFilter<number>("QUANTITY", quantityConverter);
+    price = this.addFieldFilter<number>("PRICE", priceConverter);
     party = this.addFieldFilter<(string | null)>("PARTY");
-
-    /**
-     * Идентификатор позиции внутри накладной.
-     */
     identity = this.addFieldFilter<(string | null)>("IDENTITY");
-
-    /**
-     * Справка 1. Не может быть null
-     */
     informF1RegId = this.addFieldFilter<(string | null)>("INFORM_F1_REG_ID");
-
-    /**
-     * Регистрационный номер раздела справки 2, по которому продукция была получена отправителем.
-     */
     informF2RegId = this.addFieldFilter<(string | null)>("INFORM_F2_REG_ID");
 
     constructor() {
-        super(() => this, defaultExecutor('WayBillPosition', WaybillPosition.prototype));
+        super(() => this, executor('WayBillPosition', WaybillPosition.prototype));
     }
 
 }
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybill.WaybillPositionMarkSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} waybillPositionUuid Уникальный идентификатор позиции в ТТН
+ * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} boxNumber Номер короба
+ * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} mark Марка
  */
 export class WaybillPositionMarkSortOrder extends SortOrder<WaybillPositionMarkSortOrder> {
 
-    /**
-     * Уникальный идентификатор позиции в ТТН
-     */
     waybillPositionUuid = this.addFieldSorter("WAY_BILL_POSITION_UUID");
-
-    /**
-     * Номер короба
-     */
     boxNumber  = this.addFieldSorter("BOX_NUMBER");
-
-    /**
-     * Марка
-     */
     mark = this.addFieldSorter("MARK");
 
     constructor() {
@@ -375,27 +197,20 @@ export class WaybillPositionMarkSortOrder extends SortOrder<WaybillPositionMarkS
 }
 
 /**
- * Класс для формирования запроса на получение марок позиций ТТН
+ * @class module:waybill.WaybillPositionMarkQuery
+ * @classdesc Класс для формирования запроса на получение марок позиций ТТН.
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionMarkQuery, module:waybill.WaybillPositionMarkSortOrder, module:waybill.WaybillPositionMark>} waybillPositionUuid Уникальный идентификатор позиции в ТТН
+ * @property {FieldFilter<?string, module:waybill.WaybillPositionMarkQuery, module:waybill.WaybillPositionMarkSortOrder, module:waybill.WaybillPositionMark>} boxNumber Номер короба
+ * @property {FieldFilter<string, module:waybill.WaybillPositionMarkQuery, module:waybill.WaybillPositionMarkSortOrder, module:waybill.WaybillPositionMark>} mark Марка
  */
 export class WaybillPositionMarkQuery extends FilterBuilder<WaybillPositionMarkQuery, WaybillPositionMarkSortOrder, WaybillPositionMark> {
 
-    /**
-     * Уникальный идентификатор позиции в ТТН
-     */
     waybillPositionUuid = this.addFieldFilter<(string | null)>("WAY_BILL_POSITION_UUID");
-
-    /**
-     * Номер короба
-     */
     boxNumber  = this.addFieldFilter<(string | null)>("BOX_NUMBER");
-
-    /**
-     * Марка
-     */
     mark = this.addFieldFilter<string>("MARK");
 
     constructor() {
-        super(() => this, defaultExecutor('WayBillPositionMark', WaybillPositionMark.prototype));
+        super(() => this, executor('WayBillPositionMark', WaybillPositionMark.prototype));
     }
 
 }

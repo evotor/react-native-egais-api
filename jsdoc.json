@@ -1,0 +1,49 @@
+{
+  "plugins": ["node_modules/jsdoc-babel"],
+  "babel": {
+    "plugins": "transform-flow-strip-types"
+  },
+  "recurseDepth": 10,
+  "source": {
+    "include": [
+      "model/dictionary/OrgInfo.js",
+      "model/dictionary/ProductInfo.js",
+      "model/dictionary/ProductRest.js",
+      "model/document/ActChargeOnShop.js",
+      "model/document/ActWriteOff.js",
+      "model/document/ActWriteOffShop.js",
+      "model/document/Ticket.js",
+      "model/document/TransferFromShop.js",
+      "model/document/TransferToShop.js",
+      "model/document/TtnInformF2Reg.js",
+      "model/document/Waybill.js",
+      "model/document/WaybillAct.js",
+      "model/types.js",
+      "query/inner/OrgInfoAddress.js",
+      "query/inner/ProductInfo.js",
+      "query/ActChargeOnShop.js",
+      "query/ActWriteOff.js",
+      "query/ActWriteOffShop.js",
+      "query/ClientSettings.js",
+      "query/OrgInfo.js",
+      "query/ProductRest.js",
+      "query/Ticket.js",
+      "query/TransferFromShop.js",
+      "query/TransferToShop.js",
+      "query/TtnInformF2Reg.js",
+      "query/Waybill.js",
+      "query/WaybillAct.js"
+    ],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "sourceType": "module",
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  }
+}

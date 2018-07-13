@@ -1,19 +1,23 @@
+/**
+ * Классы и типы для работы с информацией об организациях.
+ * @module module:orgInfo
+ */
 import {OrgType, WaybillTypeUsed} from "../types"
 
 /**
- * Фактический адрес произвольной формы
- *
- * @property country Страна
- * @property index Индекс
- * @property regionCode Код региона
- * @property area Область
- * @property city Город
- * @property place Район
- * @property street Улица
- * @property house Дом
- * @property building Строение
- * @property liter Литера
- * @property description Описание
+ * @class module:orgInfo.OrgInfoAddress
+ * @classdesc Фактический адрес произвольной формы.
+ * @param {?string} country Страна
+ * @param {?string} index Индекс
+ * @param {?string} regionCode Код региона
+ * @param {?string} area Область
+ * @param {?string} city Город
+ * @param {?string} place Район
+ * @param {?string} street Улица
+ * @param {?string} house Дом
+ * @param {?string} building Строение
+ * @param {?string} liter Литера
+ * @param {?string} description Описание
  */
 export class OrgInfoAddress {
     constructor(country: (string | null),
@@ -41,19 +45,19 @@ export class OrgInfoAddress {
 }
 
 /**
- *  Информация об организации
- *
- * @property type
- * @property clientRegId Код организации
- * @property fullName Наименование организации полное
- * @property shortName Наименование организации краткое
- * @property inn ИНН
- * @property kpp КПП
- * @property unp УНП для респ.Беларусь
- * @property rnn РНН(БИН/ИИН) для респ.Казахстан
- * @property address Фактический адрес
- * @param state Статус: действующая или удалена
- * @param versionWB Версия схемы накладной принимаемая организацией
+ * @class module:orgInfo.OrgInfo
+ * @classdesc Информация об организации.
+ * @param {?module:orgInfo#OrgType} type
+ * @param {string} clientRegId Код организации
+ * @param {string} fullName Наименование организации полное
+ * @param {?string} shortName Наименование организации краткое
+ * @param {?string} inn ИНН
+ * @param {?string} kpp КПП
+ * @param {?string} unp УНП для респ.Беларусь
+ * @param {?string} rnn РНН(БИН/ИИН) для респ.Казахстан
+ * @param {?module:orgInfo.OrgInfoAddress} address Фактический адрес
+ * @param {?string} state Статус: действующая или удалена
+ * @param {?module:orgInfo#WaybillTypeUsed} versionWB Версия схемы накладной принимаемая организацией
  */
 export default class OrgInfo {
     constructor(type: (OrgType | null),

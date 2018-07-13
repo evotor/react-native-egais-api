@@ -1,24 +1,28 @@
+/**
+ * Классы и типы для работы с квитанциями.
+ * @module module:ticket
+ */
 import {ConclusionType, ConfirmTicketStatus, DocType, OperationResult} from '../types'
 
 /**
- * Квитанция
- *
- * @property uuid уникальный идентификатор
- * @property docOwner кто подает документы
- * @property ticketDate Дата квитанции
- * @property identity Идентификатор документа(исходного, клиентский из содержимого XML(может не быть))
- * @property docId Ид задачи из файловой базы
- * @property transportId Транспортный ид из файловой базы
- * @property regId Присвоенный документу номер
- * @property docHash Хэш документа
- * @property docType Тип исходного документа
- * @property resultConclusion Результат фиксации
- * @property resultDate Дата фиксации
- * @property resultComments Описание результата фиксации, описание ошибки фиксации
- * @property operationResultName Операция
- * @property operationResultResult Результат выполнения
- * @property operationResultComment Сообщение
- * @property operationResultDate Дата операции
+ * @class module:ticket.Ticket
+ * @classdesc Квитанция.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} docOwner Кто подает документы
+ * @param {Date} ticketDate Дата квитанции
+ * @param {?string} identity Идентификатор документа(исходного, клиентский из содержимого XML(может не быть))
+ * @param {?string} docId Ид задачи из файловой базы
+ * @param {?string} transportId Транспортный ид из файловой базы
+ * @param {?string} regId Присвоенный документу номер
+ * @param {?string} docHash Хэш документа
+ * @param {?module:ticket#DocType} docType Тип исходного документа
+ * @param {?module:ticket#ConclusionType} resultConclusion Результат фиксации
+ * @param {?Date} resultDate Дата фиксации
+ * @param {?string} resultComments Описание результата фиксации, описание ошибки фиксации
+ * @param {?string} operationResultName Операция
+ * @param {?module:ticket#OperationResult} operationResultResult Результат выполнения
+ * @param {?string} operationResultComment Сообщение
+ * @param {?Date} operationResultDate Дата операции
  */
 export default class Ticket {
     constructor(uuid: string,
@@ -57,18 +61,18 @@ export default class Ticket {
 }
 
 /**
- * Подтверждение акта разногласий для Товарно-Транспортной Накладной
- *
- * @property uuid уникальный идентификатор
- * @property docOwner кто подает документы
- * @property identity Идентификатор документа (клиентский, к заполнению необязательный)
- * @property isConfirm Тип подтверждения: Принимаем/отказываем
- * @property ticketNumber Номер подтверждения
- * @property ticketDate Дата составления подтверждения
- * @property wbRegId ИД накладной в системе
- * @property note примечание
- * @property status Статус
- * @property rejectComment Комментарий для отказа
+ * @class module:ticket.ConfirmTicket
+ * @classdesc Подтверждение акта разногласий для Товарно-Транспортной Накладной.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} docOwner Кто подает документы
+ * @param {?string} identity Идентификатор документа (клиентский, к заполнению необязательный)
+ * @param {?module:ticket#ConclusionType} isConfirm Тип подтверждения: Принимаем/отказываем
+ * @param {?string} ticketNumber Номер подтверждения
+ * @param {?Date} ticketDate Дата составления подтверждения
+ * @param {?string} wbRegId ИД накладной в системе
+ * @param {?string} note примечание
+ * @param {module:ticket#ConfirmTicketStatus} status Статус
+ * @param {?string} rejectComment Комментарий для отказа
  */
 export class ConfirmTicket {
     constructor(uuid: string,

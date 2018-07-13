@@ -1,19 +1,23 @@
+/**
+ * Классы и типы для работы для работы с товарно-транспортной накладной.
+ * @module module:waybill
+ */
 import ProductInfo from '../dictionary/ProductInfo'
 import {Direction, UnitType, Version, WaybillResolution, WaybillStatus, WaybillType} from "../types"
 
 /**
- * Транспорт
- *
- * @property type Тип перевозки
- * @property company Название компании перевозчика
- * @property car Автомобиль
- * @property trailer Прицеп
- * @property customer Заказчики
- * @property driver Водитель
- * @property loadPoint Место погрузки
- * @property unloadPoint Место разгрузки
- * @property redirect Перенаправление
- * @property forwarder Экспедитор
+ * @class module:waybill.Transport
+ * @classdesc Транспорт.
+ * @param {?string} type Тип перевозки
+ * @param {?string} company Название компании перевозчика
+ * @param {?string} car Автомобиль
+ * @param {?string} trailer Прицеп
+ * @param {?string} customer Заказчики
+ * @param {?string} driver Водитель
+ * @param {?string} loadPoint Место погрузки
+ * @param {?string} unloadPoint Место разгрузки
+ * @param {?string} redirect Перенаправление
+ * @param {?string} forwarder Экспедитор
  */
 export class Transport {
     constructor(type: (string | null),
@@ -40,28 +44,28 @@ export class Transport {
 }
 
 /**
- *  Товарно-транспортная накладная (ТТН)
- *
- *  @property uuid уникальный иднтификатор
- *  @property docOwner кто подает документы
- *  @property identity Идентификатор накладной (клиентский, к заполнению необязательный)
- *  @property type Тип накладной
- *  @property unitType Тип поставки (упакованная или нет)
- *  @property number Номер документа
- *  @property date Дата составления
- *  @property shippingDate  Дата отгрузки продукции
- *  @property transport Информация о транспорте
- *  @property shipperId Грузоотправитель
- *  @property consigneeId Грузополучатель
- *  @property supplierId Поставщик
- *  @property base Основание
- *  @property note Заметки
- *  @property status Состояние накладной
- *  @property resolution резолюция по накладной
- *  @property ttnInformF2RegUuid uuid формы 2 для накладной
- *  @property wbRegId ИД накладной в системе (присвоенный)
- *  @property direction Направление документа в представлени УТМ (входящий/исходящий)
- *  @property version Версия протокола ЕГАИС, по которому отправлена накладная
+ * @class module:waybill.Waybill
+ * @classdesc Товарно-транспортная накладная (ТТН).
+ * @param {string} uuid уникальный иднтификатор
+ * @param {string} docOwner кто подает документы
+ * @param {?string} identity Идентификатор накладной (клиентский, к заполнению необязательный)
+ * @param {module:waybill#WaybillType} type Тип накладной
+ * @param {?module:waybill#UnitType} unitType Тип поставки (упакованная или нет)
+ * @param {string} number Номер документа
+ * @param {Date} date Дата составления
+ * @param {Date} shippingDate  Дата отгрузки продукции
+ * @param {?module:waybill.Transport} transport Информация о транспорте
+ * @param {string} shipperId Грузоотправитель
+ * @param {string} consigneeId Грузополучатель
+ * @param {?string} supplierId Поставщик
+ * @param {?string} base Основание
+ * @param {?string} note Заметки
+ * @param {module:waybill#WaybillStatus} status Состояние накладной
+ * @param {module:waybill#WaybillResolution} resolution резолюция по накладной
+ * @param {?string} ttnInformF2RegUuid uuid формы 2 для накладной
+ * @param {?string} wbRegId ИД накладной в системе (присвоенный)
+ * @param {module:waybill#Direction} direction Направление документа в представлени УТМ (входящий/исходящий)
+ * @param {Version} version Версия протокола ЕГАИС, по которому отправлена накладная
  */
 export default class Waybill {
     constructor(uuid: string,
@@ -108,19 +112,19 @@ export default class Waybill {
 }
 
 /**
- * Позиция в товарно-транспортной накладной
- *
- * @property uuid Уникальный идентификатор
- * @property waybillUuid Уникальный идентификатор накладной
- * @property productIdentity Информация о продукции
- * @property productInfo Информация о продукции
- * @property packId Идентификатор упаковки
- * @property quantity Количество
- * @property price Цена за единицу товара
- * @property party Номер партии
- * @property identity Идентификатор позиции внутри накладной
- * @property informF1RegId Справка А
- * @property informF2RegId Регистрационный номер раздела справки Б
+ * @class module:waybill.WaybillPosition
+ * @classdesc Позиция в товарно-транспортной накладной.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} waybillUuid Уникальный идентификатор накладной
+ * @param {?string} productIdentity Информация о продукции
+ * @param {module:productInfo.ProductInfo} productInfo Информация о продукции
+ * @param {?string} packId Идентификатор упаковки
+ * @param {number} quantity Количество
+ * @param {number} price Цена за единицу товара
+ * @param {?string} party Номер партии
+ * @param {?string} identity Идентификатор позиции внутри накладной
+ * @param {?string} informF1RegId Справка А
+ * @param {?string} informF2RegId Регистрационный номер раздела справки Б
  */
 export class WaybillPosition {
     constructor(uuid: string,
@@ -149,11 +153,11 @@ export class WaybillPosition {
 }
 
 /**
- * Марка в позиции товарно-транспортной накладной
- *
- * @property waybillPositionUuid Уникальный идентификатор позиции в ТТН
- * @property boxNumber Номер короба
- * @property mark Марка
+ * @class module:waybill.WaybillPositionMark
+ * @classdesc Марка в позиции товарно-транспортной накладной.
+ * @param {string} waybillPositionUuid Уникальный идентификатор позиции в ТТН
+ * @param {?string} boxNumber Номер короба
+ * @param {string} mark Марка
  */
 export class WaybillPositionMark {
     constructor(waybillPositionUuid: string,

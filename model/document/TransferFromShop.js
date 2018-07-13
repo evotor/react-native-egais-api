@@ -1,18 +1,22 @@
+/**
+ * Классы и типы для работы с актами передачи продукции.
+ * @module module:transfer
+ */
 import ProductInfo from '../dictionary/ProductInfo'
 import {TransferStatus} from '../types'
 
 /**
- * Передача продукции из торгового зала на склад
- *
- * @property uuid Уникальный идентификатор
- * @property owner Кто подает документы
- * @property identity Идентификатор документа (клиентский)
- * @property transferNumber Номер документа
- * @property transferDate Дата составления
- * @property note Примечание
- * @property status Статус обработки документа
- * @property rejectComment Комментарий для отказа
- * @property replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
+ * @class module:transfer.TransferFromShop
+ * @classdesc Акт передачи продукции из торгового зала на склад.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} owner Кто подает документы
+ * @param {?string} identity Идентификатор документа (клиентский)
+ * @param {string} transferNumber Номер документа
+ * @param {?Date} transferDate Дата составления
+ * @param {?string} note Примечание
+ * @param {module:transfer#TransferStatus} status Статус обработки документа
+ * @param {?string} rejectComment Комментарий для отказа
+ * @param {?string} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export default class TransferFromShop {
     constructor(uuid: string,
@@ -37,14 +41,14 @@ export default class TransferFromShop {
 }
 
 /**
- * Позиция акта передачи продукции из торгового зала на склад
- *
- * @property transferFromShopUuid Уникальный идентификатор документа передачи
- * @property identity Идентификатор позиции внутри акта
- * @property productCode Регистрационный код продукции
- * @property quantity Количество
- * @property informF2RegId Регистрационный номер раздела справки 2
- * @property productInfo Информация о продукции
+ * @class module:transfer.TransferFromShopPosition
+ * @classdesc Позиция акта передачи продукции из торгового зала на склад.
+ * @param {string} transferFromShopUuid Уникальный идентификатор документа передачи
+ * @param {?string} identity Идентификатор позиции внутри акта
+ * @param {string} productCode Регистрационный код продукции
+ * @param {number} quantity Количество
+ * @param {?string} informF2RegId Регистрационный номер раздела справки 2
+ * @param {module:productInfo.ProductInfo} productInfo Информация о продукции
  */
 export class TransferFromShopPosition {
     constructor(transferFromShopUuid: string,

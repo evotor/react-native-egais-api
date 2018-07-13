@@ -1,6 +1,6 @@
 {
   "name": "evotor-egais-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "react native egais support for evotor",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,12 @@
   "author": "Artemiy Lunkov <a.lunkov@evotor.ru> (http://evotor.ru/)",
   "license": "ISC",
   "dependencies": {
-    "abstract-query-builder": "^1.1.6"
+    "abstract-query-builder": "^1.1.8"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "jsdoc": "^3.5.5",
+    "jsdoc-babel": "^0.4.0"
   }
 }

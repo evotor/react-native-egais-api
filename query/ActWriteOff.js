@@ -14,57 +14,37 @@ var abstract_query_builder_1 = require("abstract-query-builder");
 var ActWriteOff_1 = require("../model/document/ActWriteOff");
 var ProductInfo_1 = require("../model/dictionary/ProductInfo");
 var ProductInfo_2 = require("./inner/ProductInfo");
-var defaultExecutor_1 = require("./defaultExecutor");
+var converters_1 = require("./converters");
+var executor_1 = require("./executor");
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:actWriteOff.ActWriteOffSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} uuid Уникальный идентификатор акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} docOwner Отправитель акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} identity Идентификатор акта списания со склада (клиентский, к заполнению необязательный)
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} number Номер документа
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} actDate Дата составления
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} type Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} note Примечание
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} status Статус акта списания
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} rejectComment Комментарий для отказа на акт списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} version Версия протокола ЕГАИС
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 var ActWriteOffSortOrder = /** @class */ (function (_super) {
     __extends(ActWriteOffSortOrder, _super);
     function ActWriteOffSortOrder() {
         var _this = _super.call(this, function () { return _this; }) || this;
-        /**
-         * Уникальный идентификатор акта списания со склада
-         */
         _this.uuid = _this.addFieldSorter("UUID");
-        /**
-         * Отправитель акта списания со склада
-         */
         _this.docOwner = _this.addFieldSorter("OWNER");
-        /**
-         * Идентификатор акта списания со склада (клиентский, к заполнению необязательный)
-         */
         _this.identity = _this.addFieldSorter("IDENTITY");
-        /**
-         * Номер документа
-         */
         _this.number = _this.addFieldSorter("NUMBER");
-        /**
-         * Дата составления
-         */
         _this.actDate = _this.addFieldSorter("ACT_DATE");
-        /**
-         * Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
-         */
         _this.type = _this.addFieldSorter("TYPE_WRITE_OFF");
-        /**
-         * Примечание
-         */
         _this.note = _this.addFieldSorter("NOTE");
-        /**
-         * Статус акта списания
-         */
         _this.status = _this.addFieldSorter("STATUS");
-        /**
-         * Комментарий для отказа на акт списания со склада
-         */
         _this.rejectComment = _this.addFieldSorter("REJECT_COMMENT");
-        /**
-         * Версия протокола ЕГАИС
-         */
         _this.version = _this.addFieldSorter("VERSION");
-        /**
-         * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-         */
         _this.replyId = _this.addFieldSorter("REPLY_ID");
         return _this;
     }
@@ -72,55 +52,34 @@ var ActWriteOffSortOrder = /** @class */ (function (_super) {
 }(abstract_query_builder_1.SortOrder));
 exports.ActWriteOffSortOrder = ActWriteOffSortOrder;
 /**
- * Класс для формирования запроса на получение актов списания со склада
+ * @class module:actWriteOff.ActWriteOffQuery
+ * @classdesc Класс для формирования запроса на получение актов списания со склада.
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} uuid Уникальный идентификатор акта списания со склада
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} docOwner Отправитель акта списания со склада
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} identity Идентификатор акта списания со склада (клиентский, к заполнению необязательный)
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} number Номер документа
+ * @property {FieldFilter<Date, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} actDate Дата составления
+ * @property {FieldFilter<?module:actWriteOff#ActWriteOffType, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} type Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} note Примечание
+ * @property {FieldFilter<module:actWriteOff#ActWriteOffStatus, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} status Статус акта списания
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} rejectComment Комментарий для отказа на акт списания со склада
+ * @property {FieldFilter<Version, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} version Версия протокола ЕГАИС
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffQuery, module:actWriteOff.ActWriteOffSortOrder, module:actWriteOff.ActWriteOff>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 var ActWriteOffQuery = /** @class */ (function (_super) {
     __extends(ActWriteOffQuery, _super);
     function ActWriteOffQuery() {
-        var _this = _super.call(this, function () { return _this; }, defaultExecutor_1.default('ActWriteOff', ActWriteOff_1.default.prototype)) || this;
-        /**
-         * Уникальный идентификатор акта списания со склада
-         */
+        var _this = _super.call(this, function () { return _this; }, executor_1.default('ActWriteOff', ActWriteOff_1.default.prototype)) || this;
         _this.uuid = _this.addFieldFilter("UUID");
-        /**
-         * Отправитель акта списания со склада
-         */
         _this.docOwner = _this.addFieldFilter("OWNER");
-        /**
-         * Идентификатор акта списания со склада (клиентский, к заполнению необязательный)
-         */
         _this.identity = _this.addFieldFilter("IDENTITY");
-        /**
-         * Номер документа
-         */
         _this.number = _this.addFieldFilter("NUMBER");
-        /**
-         * Дата составления
-         */
         _this.actDate = _this.addFieldFilter("ACT_DATE");
-        /**
-         * Причина списания (Пересортица/Недостача/Уценка/Порча/Потери/Проверки/Арест/Иные цели/Реализация)
-         */
         _this.type = _this.addFieldFilter("TYPE_WRITE_OFF");
-        /**
-         * Примечание
-         */
         _this.note = _this.addFieldFilter("NOTE");
-        /**
-         * Статус акта списания
-         */
         _this.status = _this.addFieldFilter("STATUS");
-        /**
-         * Комментарий для отказа на акт списания со склада
-         */
         _this.rejectComment = _this.addFieldFilter("REJECT_COMMENT");
-        /**
-         * Версия протокола ЕГАИС
-         */
         _this.version = _this.addFieldFilter("VERSION");
-        /**
-         * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-         */
         _this.replyId = _this.addFieldFilter("REPLY_ID");
         return _this;
     }
@@ -128,39 +87,26 @@ var ActWriteOffQuery = /** @class */ (function (_super) {
 }(abstract_query_builder_1.FilterBuilder));
 exports.default = ActWriteOffQuery;
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:actWriteOff.ActWriteOffPositionSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} uuid Уникальный идентификатор позиции акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} actWriteOffUuid Уникальный идентификатор акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} identity Идентификатор позиции акта списания со склада
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} quantity Количество
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} informF2MarkInfoJson Информация о марках в формате JSON
+ * @property {module:productInfo.ProductInfoInnerSortOrder<module:actWriteOff.ActWriteOffPositionSortOrder>} productInfo Информация о продукции
  */
 var ActWriteOffPositionSortOrder = /** @class */ (function (_super) {
     __extends(ActWriteOffPositionSortOrder, _super);
     function ActWriteOffPositionSortOrder() {
         var _this = _super.call(this, function () { return _this; }) || this;
-        /**
-         * Уникальный идентификатор позиции акта списания со склада
-         */
         _this.uuid = _this.addFieldSorter("UUID");
-        /**
-         * Уникальный идентификатор акта списания со склада
-         */
         _this.actWriteOffUuid = _this.addFieldSorter("ACT_WRITE_OFF_UUID");
-        /**
-         * Идентификатор позиции акта списания со склада
-         */
         _this.identity = _this.addFieldSorter("IDENTITY");
-        /**
-         * Количество
-         */
         _this.quantity = _this.addFieldSorter("QUANTITY");
-        /**
-         * Регистрационный номер раздела справки 2
-         */
         _this.informF2RegId = _this.addFieldSorter("INFORM_F2_REG_ID");
-        /**
-         * Информация о марках в формате JSON
-         */
         _this.informF2MarkInfoJson = _this.addFieldSorter("INFORM_F2_MARK_INFO_JSON");
-        /**
-         * Информация о продукции
-         */
         _this.productInfo = _this.addInnerSortOrder(new ProductInfo_2.ProductInfoInnerSortOrder());
         return _this;
     }
@@ -168,39 +114,26 @@ var ActWriteOffPositionSortOrder = /** @class */ (function (_super) {
 }(abstract_query_builder_1.SortOrder));
 exports.ActWriteOffPositionSortOrder = ActWriteOffPositionSortOrder;
 /**
- * Класс для формирования запроса на получение позиций акта списания со склада
+ * @class module:actWriteOff.ActWriteOffPositionQuery
+ * @classdesc Класс для формирования запроса на получение позиций акта списания со склада.
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} uuid Уникальный идентификатор позиции акта списания со склада
+ * @property {FieldFilter<string, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} actWriteOffUuid Уникальный идентификатор акта списания со склада
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} identity Идентификатор позиции акта списания со склада
+ * @property {FieldFilter<number, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} quantity Количество
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {FieldFilter<?string, module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} informF2MarkInfoJson Информация о марках в формате JSON
+ * @property {module:productInfo.ProductInfoFilter<module:actWriteOff.ActWriteOffPositionQuery, module:actWriteOff.ActWriteOffPositionSortOrder, module:actWriteOff.ActWriteOffPosition>} productInfo Информация о продукции
  */
 var ActWriteOffPositionQuery = /** @class */ (function (_super) {
     __extends(ActWriteOffPositionQuery, _super);
     function ActWriteOffPositionQuery() {
-        var _this = _super.call(this, function () { return _this; }, defaultExecutor_1.default('ActWriteOffPosition', ActWriteOff_1.ActWriteOffPosition.prototype, { productInfo: ProductInfo_1.default.prototype })) || this;
-        /**
-         * Уникальный идентификатор позиции акта списания со склада
-         */
+        var _this = _super.call(this, function () { return _this; }, executor_1.default('ActWriteOffPosition', ActWriteOff_1.ActWriteOffPosition.prototype, { productInfo: ProductInfo_1.default.prototype })) || this;
         _this.uuid = _this.addFieldFilter("UUID");
-        /**
-         * Уникальный идентификатор акта списания со склада
-         */
         _this.actWriteOffUuid = _this.addFieldFilter("ACT_WRITE_OFF_UUID");
-        /**
-         * Идентификатор позиции акта списания со склада
-         */
         _this.identity = _this.addFieldFilter("IDENTITY");
-        /**
-         * Количество
-         */
-        _this.quantity = _this.addFieldFilter("QUANTITY", function (v) { return v * 1000; });
-        /**
-         * Регистрационный номер раздела справки 2
-         */
+        _this.quantity = _this.addFieldFilter("QUANTITY", converters_1.quantityConverter);
         _this.informF2RegId = _this.addFieldFilter("INFORM_F2_REG_ID");
-        /**
-         * Информация о марках в формате JSON
-         */
         _this.informF2MarkInfoJson = _this.addFieldFilter("INFORM_F2_MARK_INFO_JSON");
-        /**
-         * Информация о продукции
-         */
         _this.productInfo = _this.addInnerFilterBuilder(new ProductInfo_2.ProductInfoFilter());
         return _this;
     }

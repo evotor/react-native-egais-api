@@ -1,20 +1,25 @@
+/**
+ * Классы и типы для работы для работы с актами разногласий для товарно-транспортной накладной.
+ * @module module:waybillAct
+ */
 import {AcceptType, Version, WaybillActStatus, WaybillActType} from "../types"
 
 /**
- * Акт разногласий для Товарно-Транспортной Накладной
- *
- * @property uuid Уникальный идентификатор
- * @property owner Кто подает документы
- * @property identity Идентификатор Акта (клиентский)
- * @property acceptType Тип подтверждения: Принимаем/есть расхождения/отказываем
- * @property number Номер акта
- * @property creationDate Дата составления акта
- * @property wbRegId Идентификатор накладной в системе
- * @property note Заметки
- * @property type Типа акта расхождения к ТТН (Полный/Частичный)
- * @property status Статус накладной
- * @property rejectComment Комментарий для отказа
- * @property replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
+ * @class module:waybillAct.WaybillAct
+ * @classdesc Акт разногласий для Товарно-Транспортной Накладной.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} owner Кто подает документы
+ * @param {?string} identity Идентификатор Акта (клиентский)
+ * @param {?module:waybillAct#AcceptType} acceptType Тип подтверждения: Принимаем/есть расхождения/отказываем
+ * @param {?string} number Номер акта
+ * @param {Date} creationDate Дата составления акта
+ * @param {?string} wbRegId Идентификатор накладной в системе
+ * @param {?string} note Заметки
+ * @param {?module:waybillAct#WaybillActType} type Типа акта расхождения к ТТН (Полный/Частичный)
+ * @param {?Version} version Версия протокола ЕГАИС
+ * @param {module:waybillAct#WaybillActStatus} status Статус накладной
+ * @param {?string} rejectComment Комментарий для отказа
+ * @param {?string} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export default class WaybillAct {
     constructor(uuid: string,
@@ -46,13 +51,13 @@ export default class WaybillAct {
 }
 
 /**
- * Позиция акта разногласий для товарно-транспортной накладной
- *
- * @property uuid Уникальный идентификатор
- * @property waybillActUuid Уникальный идентификатор акта разногласий
- * @property identity Идентификатор позиции внутри накладной
- * @property informF2RegId Регистрационный номер записи справки Б
- * @property realQuantity Количество фактическое
+ * @class module:waybillAct.WaybillActPosition
+ * @classdesc Позиция акта разногласий для товарно-транспортной накладной.
+ * @param {string} uuid Уникальный идентификатор
+ * @param {string} waybillActUuid Уникальный идентификатор акта разногласий
+ * @param {string} identity Идентификатор позиции внутри накладной
+ * @param {?string} informF2RegId Регистрационный номер записи справки Б
+ * @param {number} realQuantity Количество фактическое
  */
 export class WaybillActPosition {
     constructor(uuid: string,
@@ -69,11 +74,11 @@ export class WaybillActPosition {
 }
 
 /**
-* Марка в позиции акта разногласий для товарно-транспортной накладной
-*
-* @property waybillActPositionUuid  Уникальный идентификатор позиции акта разногласий
-* @property mark Марка
-*/
+ * @class module:waybillAct.WaybillActPositionMark
+ * @classdesc Марка в позиции акта разногласий для товарно-транспортной накладной.
+ * @param {string} waybillActPositionUuid  Уникальный идентификатор позиции акта разногласий
+ * @param {string} mark Марка
+ */
 export class WaybillActPositionMark {
     constructor(waybillActPositionUuid: string,
                 mark: string) {

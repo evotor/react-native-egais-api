@@ -1,76 +1,40 @@
 import {FilterBuilder, SortOrder} from 'abstract-query-builder'
-import defaultExecutor from "./defaultExecutor"
 import WaybillAct, {WaybillActPosition, WaybillActPositionMark} from '../model/document/WaybillAct'
 import {AcceptType, Version, WaybillActStatus, WaybillActType} from "../model/types"
+import {quantityConverter} from "./converters"
+import executor from "./executor"
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybillAct.WaybillActSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} uuid Уникальный идентификатор акта
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} docOwner Кто подает документы
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} identity Идентификатор акта (клиентский)
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} acceptType Тип подтверждения: Принимаем/есть расхождения/отказываем
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} number Номер акта
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} creationDate Дата составления акта
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} wbRegId Идентификатор накладной в системе
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} note Заметки
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} type Тип приемки: Полная/частичная
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} version Версия протокола ЕГАИС
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} status Статус накладной
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} rejectComment Комментарий для отказа
+ * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export class WaybillActSortOrder extends SortOrder<WaybillActSortOrder> {
 
-    /**
-     * Уникальный идентификатор акта
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * Кто подает документы
-     */
     docOwner = this.addFieldSorter("OWNER");
-
-    /**
-     * Идентификатор акта (клиентский)
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Тип подтверждения: Принимаем/есть расхождения/отказываем
-     */
     acceptType = this.addFieldSorter("ACCEPT_TYPE");
-
-    /**
-     * Номер акта
-     */
     number = this.addFieldSorter("NUMBER");
-
-    /**
-     * Дата составления акта
-     */
     creationDate = this.addFieldSorter("CREATION_DATE");
-
-    /**
-     * Идентификатор накладной в системе
-     */
     wbRegId = this.addFieldSorter("WB_REG_ID");
-
-    /**
-     * Заметки
-     */
     note = this.addFieldSorter("NOTE");
-
-    /**
-     * Тип приемки: Полная/частичная
-     */
     type = this.addFieldSorter("TYPE");
-
-    /**
-     * Версия протокола ЕГАИС
-     */
     version = this.addFieldSorter("VERSION");
-
-    /**
-     * Статус накладной
-     */
     status = this.addFieldSorter("STATUS");
-
-    /**
-     * Комментарий для отказа
-     */
     rejectComment = this.addFieldSorter("REJECT_COMMENT");
-
-    /**
-     * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-     */
     replyId = this.addFieldSorter("REPLY_ID");
 
     constructor() {
@@ -80,110 +44,59 @@ export class WaybillActSortOrder extends SortOrder<WaybillActSortOrder> {
 }
 
 /**
- * Класс для формирования запроса на получение актов ТТН
+ * @class module:waybillAct.WaybillActQuery
+ * @classdesc Класс для формирования запроса на получение актов ТТН.
+ * @property {FieldFilter<string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} uuid Уникальный идентификатор акта
+ * @property {FieldFilter<string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} docOwner Кто подает документы
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} identity Идентификатор акта (клиентский)
+ * @property {FieldFilter<module:waybillAct#AcceptType, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} acceptType Тип подтверждения: Принимаем/есть расхождения/отказываем
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} number Номер акта
+ * @property {FieldFilter<Date, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} creationDate Дата составления акта
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} wbRegId Идентификатор накладной в системе
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} note Заметки
+ * @property {FieldFilter<?module:waybillAct#WaybillActType, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} type Тип акта расхождения к ТТН: Полный/Частичный
+ * @property {FieldFilter<?Version, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} version Версия протокола ЕГАИС
+ * @property {FieldFilter<module:waybillAct#WaybillActStatus, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} status Статус акта разногласия для ТТН
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} rejectComment Комментарий для отказа
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActQuery, module:waybillAct.WaybillActSortOrder, module:waybillAct.WaybillAct>} replyId Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
  */
 export default class WaybillActQuery extends FilterBuilder<WaybillActQuery, WaybillActSortOrder, WaybillAct> {
 
-    /**
-     * Уникальный идентификатор акта
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * Кто подает документы
-     */
     docOwner = this.addFieldFilter<string>("OWNER");
-
-    /**
-     * Идентификатор акта (клиентский)
-     */
     identity = this.addFieldFilter<(string | null)>("IDENTITY");
-
-    /**
-     * Тип подтверждения: Принимаем/есть расхождения/отказываем
-     */
     acceptType = this.addFieldFilter<AcceptType>("ACCEPT_TYPE");
-
-    /**
-     * Номер акта
-     */
     number = this.addFieldFilter<(string | null)>("NUMBER");
-
-    /**
-     * Дата составления акта
-     */
     creationDate = this.addFieldFilter<Date>("CREATION_DATE");
-
-    /**
-     * Идентификатор накладной в системе
-     */
     wbRegId = this.addFieldFilter<(string | null)>("WB_REG_ID");
-
-    /**
-     * Заметки
-     */
     note = this.addFieldFilter<(string | null)>("NOTE");
-
-    /**
-     * Тип приемки: Полная/частичная
-     */
     type = this.addFieldFilter<(WaybillActType | null)>("TYPE");
-
-    /**
-     * Версия протокола ЕГАИС
-     */
     version = this.addFieldFilter<(Version | null)>("VERSION");
-
-    /**
-     * Статус накладной
-     */
     status = this.addFieldFilter<WaybillActStatus>("STATUS");
-
-    /**
-     * Комментарий для отказа
-     */
     rejectComment = this.addFieldFilter<(string | null)>("REJECT_COMMENT");
-
-    /**
-     * Уникальный идентификатор документа (присваивается УТМ); совпадает с идентификатором исходящего документа, который получили в ответе
-     */
     replyId = this.addFieldFilter<(string | null)>("REPLY_ID");
 
     constructor() {
-        super(() => this, defaultExecutor('WayBillAct', WaybillAct.prototype));
+        super(() => this, executor('WayBillAct', WaybillAct.prototype));
     }
 
 }
 
-
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybillAct.WaybillActPositionSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} uuid Уникальный идентификатор позиции акта
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} waybillActUuid Уникальный идентификатор акта, содержащего позицию
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} identity Идентификатор позиции внутри накладной
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} realQuantity Количество
  */
 export class WaybillActPositionSortOrder extends SortOrder<WaybillActPositionSortOrder> {
 
-    /**
-     * Уникальный идентификатор позиции
-     */
     uuid = this.addFieldSorter("UUID");
-
-    /**
-     * Уникальный идентификатор акта, содержащего позицию
-     */
     waybillActUuid = this.addFieldSorter("WAY_BILL_ACT_UUID");
-
-    /**
-     * Идентификатор позиции внутри накладной
-     */
     identity = this.addFieldSorter("IDENTITY");
-
-    /**
-     * Регистрационный номер раздела справки 2
-     */
     informF2RegId = this.addFieldSorter("INFORM_F2_REG_ID");
-
-    /**
-     * Количество
-     */
     realQuantity = this.addFieldSorter("REAL_QUANTITY");
 
     constructor() {
@@ -193,55 +106,38 @@ export class WaybillActPositionSortOrder extends SortOrder<WaybillActPositionSor
 }
 
 /**
- * Класс для формирования запроса на получение позиицй акта ТТН
+ * @class module:waybillAct.WaybillActPositionQuery
+ * @classdesc Класс для формирования запроса на получение позиицй акта ТТН.
+ * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} uuid Уникальный идентификатор позиции акта
+ * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} waybillActUuid Уникальный идентификатор акта, содержащего позицию
+ * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} identity Идентификатор позиции внутри накладной
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} informF2RegId Регистрационный номер раздела справки 2
+ * @property {FieldFilter<number, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} realQuantity Количество
  */
 export class WaybillActPositionQuery extends FilterBuilder<WaybillActPositionQuery, WaybillActPositionSortOrder, WaybillActPosition> {
 
-    /**
-     * Уникальный идентификатор позиции
-     */
     uuid = this.addFieldFilter<string>("UUID");
-
-    /**
-     * Уникальный идентификатор акта, содержащего позицию
-     */
     waybillActUuid = this.addFieldFilter<string>("WAY_BILL_ACT_UUID");
-
-    /**
-     * Идентификатор позиции внутри накладной
-     */
     identity = this.addFieldFilter<string>("IDENTITY");
-
-    /**
-     * Регистрационный номер раздела справки 2
-     */
     informF2RegId = this.addFieldFilter<(string | null)>("INFORM_F2_REG_ID");
-
-    /**
-     * Количество
-     */
-    realQuantity = this.addFieldFilter<number>("REAL_QUANTITY", (v) => v * 1000);
+    realQuantity = this.addFieldFilter<number>("REAL_QUANTITY", quantityConverter);
 
 
     constructor() {
-        super(() => this, defaultExecutor('WayBillActPosition', WaybillActPosition.prototype));
+        super(() => this, executor('WayBillActPosition', WaybillActPosition.prototype));
     }
 
 }
 
 /**
- * Класс для сортировки элементов в результе запроса
+ * @class module:waybillAct.WaybillActPositionMarkSortOrder
+ * @classdesc Класс для сортировки элементов в результе запроса.
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionMarkSortOrder>} waybillActPositionUuid Уникальный идентификатор позиции акта ТТН
+ * @property {FieldSorter<module:waybillAct.WaybillActPositionMarkSortOrder>} mark Марка
  */
 export class WaybillActPositionMarkSortOrder extends SortOrder<WaybillActPositionMarkSortOrder> {
 
-    /**
-     * Уникальный идентификатор позиции акта ТТН
-     */
     waybillActPositionUuid = this.addFieldSorter("WAY_BILL_ACT_POSITION_UUID");
-
-    /**
-     * Марка
-     */
     mark = this.addFieldSorter("MARK");
 
     constructor() {
@@ -251,22 +147,18 @@ export class WaybillActPositionMarkSortOrder extends SortOrder<WaybillActPositio
 }
 
 /**
- * Класс для формирования запроса на получение марок позиций акта ТТН
+ * @class module:waybillAct.WaybillActPositionMarkQuery
+ * @classdesc Класс для формирования запроса на получение марок позиций акта ТТН.
+ * @property {FieldFilter<?string, module:waybillAct.WaybillActPositionMarkQuery, module:waybillAct.WaybillActPositionMarkSortOrder, module:waybillAct.WaybillActPositionMark>} waybillActPositionUuid Уникальный идентификатор позиции акта ТТН
+ * @property {FieldFilter<string, module:waybillAct.WaybillActPositionMarkQuery, module:waybillAct.WaybillActPositionMarkSortOrder, module:waybillAct.WaybillActPositionMark>} mark Марка
  */
 export class WaybillActPositionMarkQuery extends FilterBuilder<WaybillActPositionMarkQuery, WaybillActPositionMarkSortOrder, WaybillActPositionMark> {
 
-    /**
-     * Уникальный идентификатор позиции акта ТТН
-     */
     waybillActPositionUuid = this.addFieldFilter<(string | null)>("WAY_BILL_ACT_POSITION_UUID");
-
-    /**
-     * Марка
-     */
     mark = this.addFieldFilter<string>("MARK");
 
     constructor() {
-        super(() => this, defaultExecutor('WayBillActPositionMark', WaybillActPositionMark.prototype));
+        super(() => this, executor('WayBillActPositionMark', WaybillActPositionMark.prototype));
     }
 
 }
