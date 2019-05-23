@@ -5,7 +5,7 @@ import executor from "./executor"
 
 /**
  * @class module:productInfo.ProductInfoSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} type Тип продукции (АП | ССП | ССНП | Спирт)
  * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} fullName Наименование продукции полное (в верхнем регистре)
  * @property {FieldSorter<module:productInfo.ProductInfoSortOrder>} shortName Наименование продукции краткое (в верхнем регистре)

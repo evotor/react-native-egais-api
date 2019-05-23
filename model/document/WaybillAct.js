@@ -1,5 +1,5 @@
 /**
- * Классы и типы для работы для работы с актами разногласий для товарно-транспортной накладной.
+ * Классы и типы для работы с актами разногласий для товарно-транспортной накладной.
  * @module module:waybillAct
  */
 import {AcceptType, Version, WaybillActStatus, WaybillActType} from "../types"

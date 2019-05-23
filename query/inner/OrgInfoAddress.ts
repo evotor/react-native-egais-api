@@ -2,8 +2,8 @@ import {InnerFilterBuilder, InnerSortOrder, SortOrder} from "abstract-query-buil
 
 /**
  * @class module:orgInfo.OrgInfoAddressSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
- * @template S Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
+ * @template S Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<S>} country Страна
  * @property {FieldSorter<S>} index Индекс
  * @property {FieldSorter<S>} regionCode Код региона
@@ -36,7 +36,7 @@ export class OrgInfoAddressSortOrder<S extends SortOrder<S>> extends InnerSortOr
  * @class module:orgInfo.OrgInfoAddressFilter
  * @classdesc Класс для фильтрации информации об адресе организации.
  * @template Q Класс для формирования запроса.
- * @template S Класс для сортировки элементов в результе запроса.
+ * @template S Класс для сортировки элементов в результате запроса.
  * @template R Результат запроса.
  * @property {FieldFilter<?string, Q, S, R>} country Страна
  * @property {FieldFilter<?string, Q, S, R>} index Индекс

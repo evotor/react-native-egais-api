@@ -6,7 +6,7 @@ import executor from "./executor"
 
 /**
  * @class module:productRest.ProductRestSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {module:productInfo.ProductInfoInnerSortOrder<module:productRest.ProductRestSortOrder>} productInfo Информация о продукции
  * @property {FieldSorter<module:productRest.ProductRestSortOrder>} stockQuantity Количество продукции на складе
  * @property {FieldSorter<module:productRest.ProductRestSortOrder>} shopQuantity Количество продукции в торговом зале
@@ -48,7 +48,7 @@ export class ProductRestQuery extends FilterBuilder<ProductRestQuery, ProductRes
 
 /**
  * @class module:productRest.ShopCommoditySortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:productRest.ShopCommoditySortOrder>} quantity Количество
  * @property {module:productInfo.ProductInfoInnerSortOrder<module:productRest.ShopCommoditySortOrder>} productInfo Информация о продукции
  */
@@ -82,7 +82,7 @@ export class ShopCommodityQuery extends FilterBuilder<ShopCommodityQuery, ShopCo
 
 /**
  * @class module:productRest.StockCommoditySortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:productRest.StockCommoditySortOrder>} informF1RegId Регистрационный номер раздела справки 1
  * @property {FieldSorter<module:productRest.StockCommoditySortOrder>} informF2RegId Регистрационный номер раздела справки 2
  * @property {FieldSorter<module:productRest.StockCommoditySortOrder>} quantity Количество
@@ -103,7 +103,7 @@ export class StockCommoditySortOrder extends SortOrder<StockCommoditySortOrder> 
 
 /**
  * @class module:productRest.StockCommodityQuery
- * @classdesc Класс для формирования запроса на получение информации о биржевых товарах.
+ * @classdesc Класс для формирования запроса на получение информации о товарах на складе.
  * @property {FieldFilter<string, module:productRest.StockCommodityQuery, module:productRest.StockCommoditySortOrder, module:productRest.StockCommodity>} informF1RegId Регистрационный номер раздела справки 1
  * @property {FieldFilter<string, module:productRest.StockCommodityQuery, module:productRest.StockCommoditySortOrder, module:productRest.StockCommodity>} informF2RegId Регистрационный номер раздела справки 2
  * @property {FieldFilter<number, module:productRest.StockCommodityQuery, module:productRest.StockCommoditySortOrder, module:productRest.StockCommodity>} quantity Количество

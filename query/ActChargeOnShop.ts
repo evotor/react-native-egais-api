@@ -8,7 +8,7 @@ import executor from "./executor"
 
 /**
  * @class module:actChargeOn.ActChargeOnShopSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} uuid Уникальный идентификатор акта поставки
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} docOwner Кто подает документы
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} identity ID акта (клиентсикй)
@@ -79,7 +79,7 @@ export class ActChargeOnShopQuery extends FilterBuilder<ActChargeOnShopQuery, Ac
 
 /**
  * @class module:actChargeOn.ActChargeOnShopPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} uuid Уникальный идентификатор позиции акта
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} actChargeOnShopUuid Идентификатор акта постановки, содержащего позицию
  * @property {FieldSorter<module:actChargeOn.ActChargeOnShopSortOrder>} identity Идентификатор позиции внутри накладной

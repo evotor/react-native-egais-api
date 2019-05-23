@@ -6,7 +6,7 @@ import executor from "./executor"
 
 /**
  * @class module:waybillAct.WaybillActSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} uuid Уникальный идентификатор акта
  * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} docOwner Кто подает документы
  * @property {FieldSorter<module:waybillAct.WaybillActSortOrder>} identity Идентификатор акта (клиентский)
@@ -84,7 +84,7 @@ export default class WaybillActQuery extends FilterBuilder<WaybillActQuery, Wayb
 
 /**
  * @class module:waybillAct.WaybillActPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} uuid Уникальный идентификатор позиции акта
  * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} waybillActUuid Уникальный идентификатор акта, содержащего позицию
  * @property {FieldSorter<module:waybillAct.WaybillActPositionSortOrder>} identity Идентификатор позиции внутри накладной
@@ -107,7 +107,7 @@ export class WaybillActPositionSortOrder extends SortOrder<WaybillActPositionSor
 
 /**
  * @class module:waybillAct.WaybillActPositionQuery
- * @classdesc Класс для формирования запроса на получение позиицй акта ТТН.
+ * @classdesc Класс для формирования запроса на получение позиций акта ТТН.
  * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} uuid Уникальный идентификатор позиции акта
  * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} waybillActUuid Уникальный идентификатор акта, содержащего позицию
  * @property {FieldFilter<string, module:waybillAct.WaybillActPositionQuery, module:waybillAct.WaybillActPositionSortOrder, module:waybillAct.WaybillActPosition>} identity Идентификатор позиции внутри накладной
@@ -131,7 +131,7 @@ export class WaybillActPositionQuery extends FilterBuilder<WaybillActPositionQue
 
 /**
  * @class module:waybillAct.WaybillActPositionMarkSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybillAct.WaybillActPositionMarkSortOrder>} waybillActPositionUuid Уникальный идентификатор позиции акта ТТН
  * @property {FieldSorter<module:waybillAct.WaybillActPositionMarkSortOrder>} mark Марка
  */

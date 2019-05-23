@@ -8,7 +8,7 @@ import executor from './executor'
 
 /**
  * @class module:actWriteOff.ActWriteOffSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} uuid Уникальный идентификатор акта списания со склада
  * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} docOwner Отправитель акта списания со склада
  * @property {FieldSorter<module:actWriteOff.ActWriteOffSortOrder>} identity Идентификатор акта списания со склада (клиентский, к заполнению необязательный)
@@ -79,7 +79,7 @@ export default class ActWriteOffQuery extends FilterBuilder<ActWriteOffQuery, Ac
 
 /**
  * @class module:actWriteOff.ActWriteOffPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} uuid Уникальный идентификатор позиции акта списания со склада
  * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} actWriteOffUuid Уникальный идентификатор акта списания со склада
  * @property {FieldSorter<module:actWriteOff.ActWriteOffPositionSortOrder>} identity Идентификатор позиции акта списания со склада

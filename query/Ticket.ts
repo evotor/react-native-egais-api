@@ -5,7 +5,7 @@ import executor from "./executor";
 
 /**
  * @class module:ticket.TicketSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:ticket.TicketSortOrder>} uuid Уникальный идентификатор
  * @property {FieldSorter<module:ticket.TicketSortOrder>} owner Кто подает документы
  * @property {FieldSorter<module:ticket.TicketSortOrder>} ticketDate Дата квитанции

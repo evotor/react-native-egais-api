@@ -46,7 +46,7 @@ export class Transport {
 /**
  * @class module:waybill.Waybill
  * @classdesc Товарно-транспортная накладная (ТТН).
- * @param {string} uuid уникальный иднтификатор
+ * @param {string} uuid уникальный идентификатор
  * @param {string} docOwner кто подает документы
  * @param {?string} identity Идентификатор накладной (клиентский, к заполнению необязательный)
  * @param {module:waybill#WaybillType} type Тип накладной

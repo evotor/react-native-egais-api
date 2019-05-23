@@ -6,7 +6,7 @@ import {OrgInfoAddressFilter, OrgInfoAddressSortOrder} from "./inner/OrgInfoAddr
 
 /**
  * @class module:orgInfo.OrgInfoSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} type Тип организации (Юридическое лицо/Индивидуальный предприниматель/Иностранец (исключая таможенный союз)/Таможенный союз)
  * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} clientRegId Код организации
  * @property {FieldSorter<module:orgInfo.OrgInfoSortOrder>} fullName Наименование организации полное (в верхнем регистре)

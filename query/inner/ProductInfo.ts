@@ -3,8 +3,8 @@ import {ProductType} from "../../model/types"
 
 /**
  * @class module:productInfo.ProductInfoInnerSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
- * @template S Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
+ * @template S Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<S>} type Тип продукции (АП | ССП | ССНП | Спирт)
  * @property {FieldSorter<S>} fullName Наименование продукции полное (в верхнем регистре)
  * @property {FieldSorter<S>} shortName Наименование продукции краткое (в верхнем регистре)
@@ -33,7 +33,7 @@ export class ProductInfoInnerSortOrder<S extends SortOrder<S>> extends InnerSort
  * @class module:productInfo.ProductInfoFilter
  * @classdesc Класс для фильтрации информации о продукции.
  * @template Q Класс для формирования запроса.
- * @template S Класс для сортировки элементов в результе запроса.
+ * @template S Класс для сортировки элементов в результате запроса.
  * @template R Результат запроса.
  * @property {FieldFilter<module:productInfo#ProductType, Q, S, R>} type Тип продукции (АП | ССП | ССНП | Спирт)
  * @property {FieldFilter<?string, Q, S, R>} fullName Наименование продукции полное (в верхнем регистре)

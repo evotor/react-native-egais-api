@@ -51,9 +51,9 @@ export default class TtnInformF2Reg {
  * @class module:waybill.TtnInformF2RegPosition
  * @classdesc Позиция в Справке 2 Информации о предыдущих отгрузках.
  * @param {string} uuid Уникальный идентификатор позиции
- * @param {string} ttnInformF2RegUuid Уникальный идентификатор справки Б
+ * @param {string} ttnInformF2RegUuid Уникальный идентификатор справки 2
  * @param {string} identity Идентификатор позиции внутри накладной
- * @param {string} informF2RegId Регистрационный номер записи справки Б
+ * @param {string} informF2RegId Регистрационный номер записи справки 2
  */
 export class TtnInformF2RegPosition {
     constructor(uuid: string,

@@ -7,7 +7,7 @@ import executor from './executor'
 
 /**
  * @class module:waybill.WaybillSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybill.WaybillSortOrder>} uuid UUID накладной
  * @property {FieldSorter<module:waybill.WaybillSortOrder>} docOwner Отправитель накладной
  * @property {FieldSorter<module:waybill.WaybillSortOrder>} identity дентификатор накладной (клиентский, к заполнению необязательный)
@@ -109,7 +109,7 @@ export default class WaybillQuery extends FilterBuilder<WaybillQuery, WaybillSor
 
 /**
  * @class module:waybill.WaybillPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} uuid UUID позиции накладной
  * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} waybillUuid UUID накладной
  * @property {FieldSorter<module:waybill.WaybillPositionSortOrder>} productIdentity Идентификатор внутри файла
@@ -179,7 +179,7 @@ export class WaybillPositionQuery extends FilterBuilder<WaybillPositionQuery, Wa
 
 /**
  * @class module:waybill.WaybillPositionMarkSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} waybillPositionUuid Уникальный идентификатор позиции в ТТН
  * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} boxNumber Номер короба
  * @property {FieldSorter<module:waybill.WaybillPositionMarkSortOrder>} mark Марка

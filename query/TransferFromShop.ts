@@ -7,7 +7,7 @@ import executor from "./executor"
 
 /**
  * @class module:transfer.TransferFromShopSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} uuid Уникальный идентификатор
  * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} owner Кто подает документы
  * @property {FieldSorter<module:transfer.TransferFromShopSortOrder>} identity Идентификатор документа (клиентский)
@@ -69,7 +69,7 @@ export default class TransferFromShopQuery extends FilterBuilder<TransferFromSho
 
 /**
  * @class module:transfer.TransferFromShopPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} transferFromShopUuid Уникальный идентификатор документа передачи
  * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} identity Идентификатор позиции внутри акта
  * @property {FieldSorter<module:transfer.TransferFromShopPositionSortOrder>} productCode Регистрационный код продукции

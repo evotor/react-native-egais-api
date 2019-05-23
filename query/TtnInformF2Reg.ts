@@ -5,7 +5,7 @@ import executor from "./executor"
 
 /**
  * @class module:waybill.TtnInformF2RegSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybill.TtnInformF2RegSortOrder>} uuid Уникальный идентификатор справки 2 информации о предыдущих отгрузках
  * @property {FieldSorter<module:waybill.TtnInformF2RegSortOrder>} owner Кто подает документы
  * @property {FieldSorter<module:waybill.TtnInformF2RegSortOrder>} identity Идентификатор документа (клиентский)
@@ -83,7 +83,7 @@ export default class TtnInformF2RegQuery extends FilterBuilder<TtnInformF2RegQue
 
 /**
  * @class module:waybill.TtnInformF2RegPositionSortOrder
- * @classdesc Класс для сортировки элементов в результе запроса.
+ * @classdesc Класс для сортировки элементов в результате запроса.
  * @property {FieldSorter<module:waybill.TtnInformF2RegPositionSortOrder>} uuid Уникальный идентификатор позиции
  * @property {FieldSorter<module:waybill.TtnInformF2RegPositionSortOrder>} ttnInformF2RegUuid Уникальный идентификатор справки 2
  * @property {FieldSorter<module:waybill.TtnInformF2RegPositionSortOrder>} identity Идентификатор позиции внутри накладной
